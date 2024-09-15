@@ -15,6 +15,7 @@ public class GameManager : Singleton<GameManager>
     void Start()
     {
         SetResolution();
+        Application.targetFrameRate = 144;
     }
 
     public void SetResolution()

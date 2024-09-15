@@ -17,6 +17,10 @@ public class MonsterMovement : Monster
     public Sprite GetSprite;
     public int index = 1;
     bool plag = false;
+
+    WaitForSeconds cachedFollowRouteSeconds = new WaitForSeconds(0.1f);
+    WaitForSeconds cachedFindRouteSeconds = new WaitForSeconds(1.5f);
+
 #nullable enable
     public List<Vector3>? routes;
     // Start is called before the first frame update
@@ -47,30 +51,30 @@ public class MonsterMovement : Monster
             spriteRenderer.flipX = (dir.x > 0);
             if (Mathf.Abs(routes[index].x - transform.position.x) < 0.1f && Mathf.Abs(routes[index].y - transform.position.y) < 0.1f)
                 index++;
-            yield return new WaitForSeconds(0.1f);
+            yield return cachedFollowRouteSeconds;
         }
         yield break;
-
     }
 
     IEnumerator FindRoute()
     {
         if (!plag)
         {
+            plag = true;
             if (routes != null && routes.Count != 0)
             {
                 lastTarget = routes.Last();
                 if (Vector3.Distance(lastTarget, target.position) < 1f)
                 {
+                    plag = false;
                     yield break;
                 }
             }
             routes = PathFinding.Astar();
-            plag = true;
             index = 1;
             StopCoroutine(FollowRoute());
             StartCoroutine(FollowRoute());
-            yield return new WaitForSeconds(1f);
+            yield return cachedFindRouteSeconds;
             plag = false;
         }
         

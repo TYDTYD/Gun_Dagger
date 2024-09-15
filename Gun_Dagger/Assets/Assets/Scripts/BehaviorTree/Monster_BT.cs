@@ -174,7 +174,7 @@ public class Monster_BT : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         BT[0].operation();
     }

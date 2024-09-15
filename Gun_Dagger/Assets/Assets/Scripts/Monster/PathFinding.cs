@@ -13,8 +13,11 @@ public class PathFinding : MonoBehaviour
     public GameObject target;
     List<Vector3> result = new List<Vector3>();
     List<Vector3> wallPos = new List<Vector3>();
+    Dictionary<int, Node> openList = new Dictionary<int, Node>();
+    Dictionary<int, Node> closeList = new Dictionary<int, Node>();
     Tilemap tilemap, walls;
     float minX, minY, maxX, maxY;
+    Vector2 path = new Vector2();
     public struct Node
     {
         public int id;
@@ -63,16 +66,15 @@ public class PathFinding : MonoBehaviour
         {
             tilemap = MapManager.Instance.maps[MapManager.Instance.seed].GetComponent<Tilemap>();
         }
-        walls = tilemap.GetComponentInChildren<Wall>().GetComponent<Tilemap>();
-        target = FindAnyObjectByType<Player>().gameObject;
+        walls = GameObject.FindWithTag("Wall").GetComponent<Tilemap>();
+        target = GameObject.FindGameObjectWithTag("Player");
 
         int[] bx = { 0, 1, 0, 1 };
         int[] by = { 0, 0, 1, 1 };
         foreach (var pos in walls.cellBounds.allPositionsWithin)
         {
-            Vector3Int localPlace = new Vector3Int(pos.x, pos.y, pos.z);
-            Vector3 place = walls.CellToWorld(localPlace);
-            if (walls.HasTile(localPlace))
+            Vector3 place = walls.CellToWorld(pos);
+            if (walls.HasTile(pos))
             {
                 for(int i=0; i<4; i++)
                 {
@@ -93,13 +95,17 @@ public class PathFinding : MonoBehaviour
         maxY += 1;
     }
 
+    void Init()
+    {
+        q.Clear();
+        openList.Clear();
+        closeList.Clear();
+    }
+
 #nullable enable
     public List<Vector3>? Astar()
     {
         destIdx = 0;
-        Dictionary<int, Node> openList = new Dictionary<int, Node>();
-        Dictionary<int, Node> closeList = new Dictionary<int, Node>();
-
         destX = (int)Mathf.Round(target.transform.position.x);
         destY = (int)Mathf.Round(target.transform.position.y);
 
@@ -158,13 +164,15 @@ public class PathFinding : MonoBehaviour
             closeList[openList[index].id] = openList[index];
             openList.Remove(index);
         }
-        q.Clear();
-        result.Clear();
+
         // 목적지 좌표의 노드 반환
         if (destIdx == 0)
+        {
+            Init();
             return null;
+        }
         Node r = closeList[destIdx];
-        Vector2 path = new Vector2();
+        result.Clear();
         while (true)
         {
             path.Set(r.pos.x, r.pos.y);
@@ -176,6 +184,7 @@ public class PathFinding : MonoBehaviour
                 break;
             r = closeList[r.parentId];
         }
+        Init();
         // 역경로의 순서를 거꾸로 뒤집기
         result.Reverse();
         return result; 
