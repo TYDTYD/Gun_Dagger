@@ -7,9 +7,12 @@ public class ItemSystem : MonoBehaviour
 {
     public ItemData[] ItemDataSet;
     public Item[] ItemSet = new Item[100];
-    WeaponData GetWeaponData;
+    public WeaponData GetWeaponData;
     Player GetPlayer;
     Subject<int> timer = new Subject<int>();
+
+    public ReactiveProperty<int> health = new ReactiveProperty<int>(100);
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +25,12 @@ public class ItemSystem : MonoBehaviour
         }
         ItemSet[0].GetExecute = MilitaryServiceCompletion;
         //ItemSet[1].GetEvent = Sprained_Ankle;
+
+        /*
+        health.Where(currentHealth => currentHealth <= 20)
+            .Subscribe(_ => MilitaryServiceCompletion())
+            .AddTo(this);
+        */
     }
 
     // Update is called once per frame

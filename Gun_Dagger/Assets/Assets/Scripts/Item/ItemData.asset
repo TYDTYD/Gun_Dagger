@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f297baeca1f73c48b17ebedc3d646c0, type: 3}
   m_Name: ItemData
   m_EditorClassIdentifier: 
-  ItemName: ddd
+  ItemName: "\uC774\uC2B9\uBBFC\uC758 \uAC00\uD638"
   tier: 1
   IsReturn: 0
   type: 0
-  shortDescription: ddd
-  longDescription: dddd
+  shortDescription: "\uC774\uC2B9\uBBFC\uC758 \uAC00\uD638\uB97C \uBC1B\uB294\uB2E4"
+  longDescription: "\uCCB4\uB825\uC774 500 \uC99D\uAC00\uD55C\uB2E4"
   statTypes: 00000000
-  value: 2d000000
+  value: f4010000

@@ -19,7 +19,7 @@ public class MonsterMovement : Monster
     bool plag = false;
 
     WaitForSeconds cachedFollowRouteSeconds = new WaitForSeconds(0.1f);
-    WaitForSeconds cachedFindRouteSeconds = new WaitForSeconds(1.5f);
+    WaitForSeconds cachedFindRouteSeconds = new WaitForSeconds(1f);
 
 #nullable enable
     public List<Vector3>? routes;
@@ -102,9 +102,11 @@ public class MonsterMovement : Monster
     {
         switch (_BT.GetState)
         {
-            case 0:
+            case Monster_BT.State.groggi:
                 {
-                    spriteRenderer.sprite = GetSprite;
+                    rigid.velocity = Vector2.zero;
+                    
+                    Debug.Log("그로기");
                     break;
                 }
             case Monster_BT.State.chase: // chase 상태

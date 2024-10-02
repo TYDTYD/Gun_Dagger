@@ -35,6 +35,8 @@ public class Selector : Node
     private List<Node> nodes = new List<Node>();
     public override NodeState operation()
     {
+        //Debug.Log("selector");
+        
         foreach (Node node in nodes)
         {
             switch (node.operation())
@@ -51,7 +53,8 @@ public class Selector : Node
                     continue;
             }
         }
-        return NodeState.FAILURE;
+        state = NodeState.FAILURE;
+        return state;
     }
     public void add(Node child)
     {
@@ -64,7 +67,7 @@ public class Sequence : Node
     private List<Node> nodes = new List<Node>();
     public override NodeState operation()
     {
-        
+        //Debug.Log("sequence");
         foreach (Node node in nodes)
         {
             switch (node.operation())
@@ -82,6 +85,7 @@ public class Sequence : Node
                     return state;
             }
         }
+        state = NodeState.FAILURE;
         return state;
     }
 
@@ -97,6 +101,7 @@ public class Execution : Node
     Func<NodeState> action;
     public Execution(Func<NodeState> func)
     {
+        //Debug.Log("execution");
         action = func;
     }
     

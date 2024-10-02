@@ -19,12 +19,14 @@ public class MonsterHealth : Monster, IHealthSystem
     int currentDef = 3;
     MonsterMovement GetMonsterMovement;
     Rigidbody2D GetRigidbody2D;
+    Animator ani;
     Monster GetMonster;
     [SerializeField]
     Sprite idle;
     [SerializeField]
     Sprite attacked;
     SpriteRenderer spriteRenderer;
+    Color GetColor = new Color(1f, 131/255f, 131/255f);
     
     
     // 데미지 입는 함수
@@ -108,7 +110,7 @@ public class MonsterHealth : Monster, IHealthSystem
         GetMonster = GetComponent<Monster>();
         spriteRenderer =GetComponent<SpriteRenderer>();
         GetRigidbody2D = GetComponent<Rigidbody2D>();
-        
+        ani = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -143,11 +145,13 @@ public class MonsterHealth : Monster, IHealthSystem
     IEnumerator Groggi(float time)
     {
         GetMonster.BT.GetState = Monster_BT.State.groggi;
-        GetMonsterMovement.enabled = false;
+        ani.enabled = false;
         spriteRenderer.sprite = attacked;
+        spriteRenderer.color = GetColor;
         yield return new WaitForSeconds(time);
+        spriteRenderer.color = Color.white;
         spriteRenderer.sprite = idle;
-        GetMonsterMovement.enabled = true;
+        ani.enabled = true;
         groggiTime = 0f;
         GetMonster.BT.GetState = Monster_BT.State.Idle;
     }
@@ -157,7 +161,7 @@ public class MonsterHealth : Monster, IHealthSystem
         if (groggiTime > 0f)
         {
             GetMonster.BT.GetState = Monster_BT.State.groggi;
-            StartCoroutine(Groggi(groggiplusTime));
+            StartCoroutine(Groggi(groggiTime));
             return Node.NodeState.SUCCESS;
         }
         return Node.NodeState.FAILURE;
@@ -176,7 +180,7 @@ public class MonsterHealth : Monster, IHealthSystem
 
     public void KnockBack(Vector2 dir)
     {
-        GetRigidbody2D.AddForce(dir);
+        GetRigidbody2D.AddForce(dir * 100);
     }
     public void PlayerEffectDir(Vector2 dir)
     {

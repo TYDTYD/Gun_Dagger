@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UniRx;
 // 플레이어 체력 관련
 
 public class PlayerHealth : Player, IHealthSystem
@@ -10,6 +10,7 @@ public class PlayerHealth : Player, IHealthSystem
     [SerializeField]
     int maxHealth = 100;
     public float currentHealth;
+    public ReactiveProperty<float> health = new ReactiveProperty<float>(100);
     [SerializeField]
     public int currentDef = 3; // 플레이어 방어력
     private bool invincible = false; // 무적 비활성화
@@ -23,7 +24,7 @@ public class PlayerHealth : Player, IHealthSystem
     }
     void Update()
     {
-        HpBar.GetComponent<Slider>().value =currentHealth;
+        HpBar.GetComponent<Slider>().value = currentHealth;
     }
 
     public void SetInvincible(bool value) // 무적 상태 설정
@@ -39,6 +40,7 @@ public class PlayerHealth : Player, IHealthSystem
             if (pen > currentDef)
             {
                 currentHealth -= damage;
+                health.Value -= damage;
             }
             else
             {
