@@ -53,7 +53,8 @@ public class CloseAttack : MonoBehaviour
             return Node.NodeState.RUNNING;
 
         boxCollider2D.enabled = false;
-
+        if (GetPlayer == null)
+            return Node.NodeState.FAILURE;
         if (Vector2.Distance(transform.position, GetPlayer.GetTransform.position) < cognitionRange)
         {
             _BT.GetState = Monster_BT.State.ready;

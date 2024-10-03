@@ -153,20 +153,27 @@ public class Monster_BT : MonoBehaviour
         return Node.NodeState.SUCCESS;
     }
 
+    bool rotation = true;
     IEnumerator StartRandom()
     {
         float speed = movement.speed;
-        int randL = UnityEngine.Random.Range(-1, 1);
-        int randR = UnityEngine.Random.Range(-1, 1);
-        yield return new WaitForSeconds(1f);
-        GetRigidbody2D.velocity = new Vector2(randL * speed, randR * speed);
+        int randL = UnityEngine.Random.Range(-1, 2);
+        int randR = UnityEngine.Random.Range(-1, 2);
+        if (rotation)
+        {
+            Debug.Log(randL);
+            Debug.Log(randR);
+            rotation = false;
+            GetRigidbody2D.velocity = new Vector2(randL * speed, randR * speed);
+            yield return new WaitForSeconds(1f);
+            rotation = true;
+        }   
     }
     // 로밍 함수
     Node.NodeState SetRoaming()
     {
         if (state == State.delay || state == State.attack)
             return Node.NodeState.FAILURE;
-        GetRigidbody2D.velocity = Vector2.zero;
         state = State.roaming;
         StartCoroutine(StartRandom());
         return Node.NodeState.SUCCESS;

@@ -35,7 +35,6 @@ public class Selector : Node
     private List<Node> nodes = new List<Node>();
     public override NodeState operation()
     {
-        //Debug.Log("selector");
         
         foreach (Node node in nodes)
         {
