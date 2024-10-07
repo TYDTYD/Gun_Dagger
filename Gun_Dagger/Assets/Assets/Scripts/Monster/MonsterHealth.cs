@@ -7,7 +7,7 @@ using DamageNumbersPro;
 
 // 몬스터 체력 관련
 
-public class MonsterHealth : Monster, IHealthSystem
+public class MonsterHealth : MonoBehaviour, IHealthSystem
 {
     float groggiTime = 0f;
     float groggiplusTime = 0f;
@@ -15,12 +15,10 @@ public class MonsterHealth : Monster, IHealthSystem
     int n = 1;
     float currentHealth;
     readonly static int minHealth = 0;
-    [SerializeField]
     int currentDef = 3;
-    MonsterMovement GetMonsterMovement;
     Rigidbody2D GetRigidbody2D;
     Animator ani;
-    Monster GetMonster;
+    [SerializeField] Monster GetMonster;
     [SerializeField]
     Sprite idle;
     [SerializeField]
@@ -30,7 +28,7 @@ public class MonsterHealth : Monster, IHealthSystem
     
     
     // 데미지 입는 함수
-    public GameObject HpBar;
+    public Slider HpBar;
     public DamageNumber DamageNumber;
 
 
@@ -49,7 +47,7 @@ public class MonsterHealth : Monster, IHealthSystem
 
         if (pen > currentDef)
         {
-            if (GetMonster.BT.GetState == Monster_BT.State.groggi)
+            if (GetMonster.GetMonster_BT.GetState == Monster_BT.State.groggi)
             {
                 currentHealth -= (int)(damage * (100 + n) * 0.01f);
                 DamageNumber DN = DamageNumber.Spawn(transform.position, (int)(damage * (100 + n) * 0.01f));
@@ -66,7 +64,7 @@ public class MonsterHealth : Monster, IHealthSystem
         }
         else
         {
-            if (GetMonster.BT.GetState == Monster_BT.State.groggi)
+            if (GetMonster.GetMonster_BT.GetState == Monster_BT.State.groggi)
             {
                 currentHealth -= (int)(damage / (1 + currentDef - (int)pen) * (100 + n) * 0.01f);
                 DamageNumber DN = DamageNumber.Spawn(transform.position, (int)(damage / (1 + currentDef - (int)pen) * (100 + n) * 0.01f));
@@ -79,9 +77,7 @@ public class MonsterHealth : Monster, IHealthSystem
                 DamageNumber DN = DamageNumber.Spawn(transform.position, damage / (1 + currentDef - (int)pen));
                 DN.SetFollowedTarget(transform);
             }
-                
         }
-
     }
     
 
@@ -105,46 +101,39 @@ public class MonsterHealth : Monster, IHealthSystem
     void Start()
     {
         currentHealth = maxHealth;
-        HpBar.GetComponent<Slider>().maxValue = maxHealth;
-        GetMonsterMovement = GetComponent<MonsterMovement>();
-        GetMonster = GetComponent<Monster>();
-        spriteRenderer =GetComponent<SpriteRenderer>();
-        GetRigidbody2D = GetComponent<Rigidbody2D>();
-        ani = GetComponent<Animator>();
+        HpBar.maxValue = maxHealth;
+        spriteRenderer = GetMonster.GetSpriteRenderer;
+        GetRigidbody2D = GetMonster.GetRigidbody2D;
+        ani = GetMonster.GetAnimator;
     }
 
     // Update is called once per frame
     // 임시 기능 : 체력이 0 이하로 떨어졌을 시 비활성화
     void Update()
     {
-        HpBar.GetComponent<Slider>().value = currentHealth;
+        HpBar.value = currentHealth;
         if (minHealth >= currentHealth)
         {
             MonsterSpawner.monsterCount--;
-            if(GetMonster.type==monsterType.Gunslinger)
+            currentHealth = maxHealth;
+            switch (GetMonster.GetMonsterType)
             {
-                // 죽은 몬스터를 다시 풀링 매니저에 삽입
-                currentHealth = maxHealth;
-                PoolingManager.Instance.ReturnObject(ObjectType.Gunslinger,gameObject);
-            }
-            else if(GetMonster.type == monsterType.BatCatcher)
-            {
-                // 죽은 몬스터를 다시 풀링 매니저에 삽입
-                currentHealth = maxHealth;
-                PoolingManager.Instance.ReturnObject(ObjectType.BatCatcher,gameObject);
-            }
-            else if (GetMonster.type == monsterType.Swordsman)
-            {
-                // 죽은 몬스터를 다시 풀링 매니저에 삽입
-                currentHealth = maxHealth;
-                PoolingManager.Instance.ReturnObject(ObjectType.SwordsMan, gameObject);
+                case Monster.monsterType.Gunslinger:
+                    PoolingManager.Instance.ReturnObject(ObjectType.Gunslinger, gameObject);
+                    break;
+                case Monster.monsterType.Swordsman:
+                    PoolingManager.Instance.ReturnObject(ObjectType.BatCatcher, gameObject);
+                    break;
+                case Monster.monsterType.BatCatcher:
+                    PoolingManager.Instance.ReturnObject(ObjectType.SwordsMan, gameObject);
+                    break;
             }
         }
     }
 
     IEnumerator Groggi(float time)
     {
-        GetMonster.BT.GetState = Monster_BT.State.groggi;
+        GetMonster.GetMonster_BT.GetState = Monster_BT.State.groggi;
         ani.enabled = false;
         spriteRenderer.sprite = attacked;
         spriteRenderer.color = GetColor;
@@ -153,14 +142,14 @@ public class MonsterHealth : Monster, IHealthSystem
         spriteRenderer.sprite = idle;
         ani.enabled = true;
         groggiTime = 0f;
-        GetMonster.BT.GetState = Monster_BT.State.Idle;
+        GetMonster.GetMonster_BT.GetState = Monster_BT.State.Idle;
     }
 
     public Node.NodeState SetGroggi()
     {
         if (groggiTime > 0f)
         {
-            GetMonster.BT.GetState = Monster_BT.State.groggi;
+            GetMonster.GetMonster_BT.GetState = Monster_BT.State.groggi;
             StartCoroutine(Groggi(groggiTime));
             return Node.NodeState.SUCCESS;
         }
@@ -171,7 +160,7 @@ public class MonsterHealth : Monster, IHealthSystem
     {
         if (groggiTime > 0.5f)
         {
-            GetMonster.BT.GetState = Monster_BT.State.groggi;
+            GetMonster.GetMonster_BT.GetState = Monster_BT.State.groggi;
             StartCoroutine(Groggi(groggiplusTime));
             return Node.NodeState.SUCCESS;
         }

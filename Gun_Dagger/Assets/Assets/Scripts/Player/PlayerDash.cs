@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerDash : Player
+public class PlayerDash : MonoBehaviour
 {
     private bool isFunAllow = true;
 
@@ -52,15 +52,15 @@ public class PlayerDash : Player
                     case 15: curPos = backward + left; break;
                     case 35: curPos = backward + right; break;
                 }
-                pos.dashDir = Vector2.zero;
-                monster.GetHealth.TakeDamage(DashDamage,null);
+                pos.GetDir = Vector2.zero;
+                monster.GetMonsterHealth.TakeDamage(DashDamage,null);
                 Vector2 dir = new Vector2(transform.position.x - other.collider.ClosestPoint(transform.position).x, transform.position.y - other.collider.ClosestPoint(transform.position).y);
-                monster.GetHealth.KnockBack(dir.normalized * DashKnockBack);
+                monster.GetMonsterHealth.KnockBack(dir.normalized * DashKnockBack);
 
             }
             else if (other.gameObject.TryGetComponent(out BreakWallHealth wallHealth))
             {
-                pos.dashDir = Vector2.zero;
+                pos.GetDir = Vector2.zero;
                 wallHealth.TakeDamage(DashDamage,null);
             }
         }
@@ -84,7 +84,7 @@ public class PlayerDash : Player
                 case 15: curPos = backward + left; break;
                 case 35: curPos = backward + right; break;
             }
-            pos.dashDir = curPos * DashSpeed * DashDistance;
+            pos.GetDir = curPos * DashSpeed * DashDistance;
             player.GetHealth.SetInvincible(false);
             Invoke("EnableFun", DashCool);
             Invoke("CountInit", DashSpeed);
@@ -93,7 +93,7 @@ public class PlayerDash : Player
     void CountInit()
     {
         count = 0;
-        pos.dashDir = Vector2.zero;
+        pos.GetDir = Vector2.zero;
     }
 
     void EnableFun()

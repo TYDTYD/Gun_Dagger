@@ -20,7 +20,7 @@ public class PlayerStat : MonoBehaviour
     {
         {// ÅØ½ºÆ® °ø°£
             stat.text = "µ· : " + GameManager.Instance.money+ "\n"
-                               +"Åº ¼ö : " + weapon.collectionBulletNum+ "\n";
+                               +"Åº ¼ö : " + weapon.GetCollectionBulletNum + "\n";
         }
         stat.transform.position = Camera.main.transform.position + new Vector3(0, 0, 10);
         if (Input.GetKey(KeyCode.Tab))

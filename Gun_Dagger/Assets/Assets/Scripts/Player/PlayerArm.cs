@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerArm : Player {
+public class PlayerArm : MonoBehaviour 
+{
+    [SerializeField]
+    Player GetPlayer;
     [SerializeField]
     public Transform armPosition;
     public Transform shoulder;
@@ -25,7 +28,7 @@ public class PlayerArm : Player {
     void Update()
     {
         // 플레이어 방향따라 좌우 반전
-        if (GetFlip())
+        if (GetPlayer.GetSpriteRenderer.flipX)
         {
             // 왼쪽 방향
             armPosition.localPosition = leftPosition;

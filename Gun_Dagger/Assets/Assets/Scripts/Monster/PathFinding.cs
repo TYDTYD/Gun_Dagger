@@ -105,7 +105,6 @@ public class PathFinding : MonoBehaviour
 #nullable enable
     public List<Vector3>? Astar()
     {
-        return null;
         destIdx = 0;
         destX = (int)Mathf.Round(target.transform.position.x);
         destY = (int)Mathf.Round(target.transform.position.y);

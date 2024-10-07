@@ -6,17 +6,43 @@ using System;
 // 몬스터 관련 함수
 public class Monster : MonoBehaviour
 {
-    MonsterHealth monsterHealth;
-    MonsterMovement monsterMovement;
-    Rigidbody2D Rigidbody;
-    Monster_BT Monster_bt;
-    public monsterType type;
+    [SerializeField] monsterData GetMonsterData;
+    [SerializeField] MonsterHealth monsterHealth;
+    [SerializeField] MonsterMovement monsterMovement;
+    [SerializeField] PathFinding pathFinding;
+    [SerializeField] Rigidbody2D Rigidbody;
+    [SerializeField] Monster_BT Monster_bt;
+    [SerializeField] monsterType type;
+    [SerializeField] Animator animator;
+    [SerializeField] SpriteRenderer spriteRenderer;
+    Player player;
 
-    public Monster_BT BT
+    private void Start()
     {
-        get{ return Monster_bt; }
+        player = FindObjectOfType<Player>();
     }
 
+    public Player GetPlayer
+    {
+        get
+        {
+            return player;
+        }
+    }
+    public SpriteRenderer GetSpriteRenderer
+    {
+        get
+        {
+            return spriteRenderer;
+        }
+    }
+    public Animator GetAnimator
+    {
+        get
+        {
+            return animator;
+        }
+    }
     public enum monsterType
     {
         Gunslinger,
@@ -24,14 +50,23 @@ public class Monster : MonoBehaviour
         BatCatcher
     }
 
-    public Vector3 position
+    public monsterType GetMonsterType
     {
         get
         {
-            return transform.position;
+            return type;
         }
     }
-    public MonsterHealth GetHealth
+    
+    public Monster_BT GetMonster_BT
+    {
+        get
+        {
+            return Monster_bt;
+        }
+    }
+
+    public MonsterHealth GetMonsterHealth
     {
         get
         {
@@ -39,7 +74,7 @@ public class Monster : MonoBehaviour
         }
     }
 
-    public MonsterMovement GetMovement
+    public MonsterMovement GetMonsterMovement
     {
         get
         {
@@ -47,24 +82,19 @@ public class Monster : MonoBehaviour
         }
     }
 
-    public Rigidbody2D GetRigidbody
+    public PathFinding GetPathFinding
+    {
+        get
+        {
+            return pathFinding;
+        }
+    }
+
+    public Rigidbody2D GetRigidbody2D
     {
         get
         {
             return Rigidbody;
         }
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        monsterHealth=GetComponent<MonsterHealth>();
-        Rigidbody = GetComponent<Rigidbody2D>();
-        Monster_bt = GetComponent<Monster_BT>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

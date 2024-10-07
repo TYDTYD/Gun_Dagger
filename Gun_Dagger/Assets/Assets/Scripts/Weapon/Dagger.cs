@@ -6,6 +6,7 @@ using System;
 public class Dagger : Weapon
 {
     SpriteRenderer render;
+    Player GetPlayer;
     public event Action AttckEvent;
     [SerializeField]
     protected Dagger GetDagger;
@@ -46,10 +47,8 @@ public class Dagger : Weapon
     // 스타트 함수 제거 금지! Weapon의 스타트 함수를 상속받지 않기 위함
     private void Start()
     {
-        player = GetComponentInParent<Player>();
         render = GetComponent<SpriteRenderer>();
-        obj = GameObject.Find("Player");
-        ani = obj.GetComponent<Animator>();
+        ani = GetPlayer.GetAnimator;
         playerTransform = player.GetTransform;
         dist = Vector3.Distance(playerTransform.position, transform.position);
         AttckEvent += DaggerAttck;
@@ -61,7 +60,7 @@ public class Dagger : Weapon
     // Update is called once per frame
     private void Update()
     {
-        render.flipX = Player.GetFlip();
+        render.flipX = GetPlayer.GetSpriteRenderer.flipX;
         if (Input.GetMouseButtonDown(0))
         {
             AttckEvent();
@@ -109,7 +108,7 @@ public class Dagger : Weapon
             player.setFlip(false);
             //render.flipX = true;
         }
-        transform.position = new Vector2(ani_Transform.position.x+(Player.GetFlip() ? 1.5f:-1.5f),ani_Transform.position.y);
+        transform.position = new Vector2(ani_Transform.position.x+(GetPlayer.GetSpriteRenderer.flipX ? 1.5f:-1.5f),ani_Transform.position.y);
         transform.rotation = ani_Transform.rotation;
         
         

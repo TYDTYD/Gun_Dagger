@@ -19,7 +19,7 @@ public class BulletShop : MonoBehaviour
     {
         bulText.text = "현재 탄환 가격 : " + weapon.rangeWeaponData.bulletPrice + "$\n" +
                                    "보유 자금 : " + GameManager.Instance.money + "$\n" +
-                                   "보유 탄환 : " + weapon.collectionBulletNum + "$\n";
+                                   "보유 탄환 : " + weapon.GetCollectionBulletNum + "$\n";
     }
 
 

@@ -19,17 +19,22 @@ public class Weapon : MonoBehaviour
     bool isChanged = false;
 
     protected float reloadTime = 2.5f;
-    public bool cycle = true;
-    public bool isFull = true;
-    public int bulletNum = 6;
-    public int collectionBulletNum = 30;
+    bool cycle = true;
+    bool isFull = true;
+    int bulletNum = 6;
+    int collectionBulletNum = 30;
     public Text BulletNumText;
     public Text bulletState;
-    public float cycleTime;
+    float cycleTime=0.4f;
+
+    public int GetCollectionBulletNum
+    {
+        get { return collectionBulletNum; }
+    }
 
     public BulletData data;
     Vector2 mouse;
-    public Light2D light;
+    public Light2D light2d;
     public DamageNumber DNumber;
     CameraShake cameraShake;
     // Start is called before the first frame update
@@ -151,9 +156,9 @@ public class Weapon : MonoBehaviour
     }
     IEnumerator flash()
     {
-        light.enabled = true;
+        light2d.enabled = true;
         yield return new WaitForSeconds(0.05f);
-        light.enabled = false;
+        light2d.enabled = false;
     }
 
 }

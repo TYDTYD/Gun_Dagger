@@ -660,6 +660,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb3ff0fd9c73e354b8497f44c1c3c46d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movement: {fileID: 6409405122493723018}
+  health: {fileID: 8871189809288618444}
+  arm: {fileID: 813695445852647856}
+  dash: {fileID: 8684845505304240868}
+  stat: {fileID: 6144096316385994725}
+  animator: {fileID: 582305690055037694}
+  weapon: {fileID: 4436237657120195325}
+  rigid: {fileID: 5929725126359819276}
 --- !u!114 &6409405122493723018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -690,6 +698,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 100
+  health:
+    value: 100
   currentDef: 3
   HpBar: {fileID: 3600312240251098415}
 --- !u!114 &813695445852647856
@@ -704,6 +714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17fefe7e823cb564e8098d2383ccce13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GetPlayer: {fileID: 0}
   armPosition: {fileID: 4479421579594747614}
   shoulder: {fileID: 2958649187728546379}
   gun: {fileID: 6006641880865879495}
@@ -754,7 +765,7 @@ MonoBehaviour:
   bulletState: {fileID: 0}
   cycleTime: 0.4
   data: {fileID: 11400000, guid: 66d521942d60ed6429e02dcb0774fb9f, type: 2}
-  light: {fileID: 2689219413029778480}
+  light2d: {fileID: 0}
   DNumber: {fileID: 7180886211088203216, guid: ff9f4342357055646b5b77525b3a21f0, type: 3}
 --- !u!210 &6071210977742778402
 SortingGroup:
@@ -860,7 +871,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -1069,7 +1080,7 @@ MonoBehaviour:
   bulletState: {fileID: 0}
   cycleTime: 0
   data: {fileID: 0}
-  light: {fileID: 0}
+  light2d: {fileID: 0}
   DNumber: {fileID: 0}
   GetDagger: {fileID: 5590808199729170619}
   ani_Transform: {fileID: 0}
@@ -1258,7 +1269,7 @@ MonoBehaviour:
   bulletState: {fileID: 0}
   cycleTime: 0
   data: {fileID: 0}
-  light: {fileID: 0}
+  light2d: {fileID: 0}
   DNumber: {fileID: 0}
   GetDagger: {fileID: 5590808199729170619}
   ani_Transform: {fileID: 7080953457546946791}
@@ -1393,7 +1404,7 @@ MonoBehaviour:
   bulletState: {fileID: 0}
   cycleTime: 0
   data: {fileID: 0}
-  light: {fileID: 0}
+  light2d: {fileID: 0}
   DNumber: {fileID: 0}
 --- !u!114 &8472719180613253154
 MonoBehaviour:
@@ -1417,5 +1428,5 @@ MonoBehaviour:
   bulletState: {fileID: 0}
   cycleTime: 0
   data: {fileID: 0}
-  light: {fileID: 0}
+  light2d: {fileID: 0}
   DNumber: {fileID: 0}

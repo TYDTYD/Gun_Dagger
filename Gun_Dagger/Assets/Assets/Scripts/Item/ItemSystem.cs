@@ -54,8 +54,8 @@ public class ItemSystem : MonoBehaviour
 
     IEnumerator MoveDecrease()
     {
-        GetPlayer.GetMovement.moveSpeed *= 0.75f;
+        GetPlayer.GetMovement.GetSpeed *= 0.75f;
         yield return new WaitForSeconds(1f);
-        GetPlayer.GetMovement.moveSpeed *= 1.25f;
+        GetPlayer.GetMovement.GetSpeed *= 1.25f;
     }
 }

@@ -47,10 +47,9 @@ public class Monster_BT : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        monster = GetComponent<Monster>();
-        health = GetComponent<MonsterHealth>();
-        movement = GetComponent<MonsterMovement>();
-        GetRigidbody2D = GetComponent<Rigidbody2D>();
+        health = monster.GetMonsterHealth;
+        movement = monster.GetMonsterMovement;
+        GetRigidbody2D = monster.GetRigidbody2D;
         chase = new Execution(movement.SetChase);
         groggi = new Execution(health.SetGroggi);
         overGroggi = new Execution(health.OverSetGroggi);
@@ -58,15 +57,10 @@ public class Monster_BT : MonoBehaviour
         roaming = new Execution(SetRoaming);
         afterDelay = new Execution(AfterDelay);
 
-        if (TryGetComponent<CloseAttack>(out close))
+        if (TryGetComponent(out IAttackType attackType))
         {
-            attackChance = new Execution(close.Chance);
-            attack = new Execution(AttackLogic);
-        }
-        else if(TryGetComponent<StandOffAttack>(out standOff))
-        {
-            attackChance = new Execution(standOff.Chance);
-            attack = new Execution(StandOffAttackLogic);
+            attackChance = new Execution(attackType.Chance);
+            attack = new Execution(attackType.AttackLogic);
         }
         
         BT.Add(damageSelector);
@@ -85,15 +79,8 @@ public class Monster_BT : MonoBehaviour
     IEnumerator AttackWithDelay()
     {
         yield return new WaitForSeconds(delayTime);
-        if (close != null)
-        {
-            close.weaponRange.GetComponent<BoxCollider2D>().enabled = true;
-            close.weaponRange.GetComponent<SpriteRenderer>().enabled = false;
-        }
-        else
-        {
-            standOff.SetAttack();
-        }
+        if (TryGetComponent(out IAttackType attackType))
+            attackType.SetAttack();
         state = State.afterdelay;
         StartCoroutine(AttackAfterDelay());
         yield return null;
@@ -156,7 +143,7 @@ public class Monster_BT : MonoBehaviour
     bool rotation = true;
     IEnumerator StartRandom()
     {
-        float speed = movement.speed;
+        float speed = movement.GetSpeed;
         int randL = UnityEngine.Random.Range(-1, 2);
         int randR = UnityEngine.Random.Range(-1, 2);
         if (rotation)

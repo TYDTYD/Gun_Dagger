@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 5252338915410618526}
   - component: {fileID: 2198548991519588789}
   - component: {fileID: 2607110414661606232}
-  - component: {fileID: 7255248302507239661}
   - component: {fileID: 7579029007793924407}
   - component: {fileID: 9025287916149946297}
   - component: {fileID: -327274416650200995}
@@ -170,7 +169,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ae6ff5740c88114fb36bf4c78cafa5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GetMonsterData: {fileID: 0}
+  monsterHealth: {fileID: 5252338915410618526}
+  monsterMovement: {fileID: 2198548991519588789}
+  pathFinding: {fileID: 9025287916149946297}
+  Rigidbody: {fileID: 8799547289487609500}
+  Monster_bt: {fileID: 2607110414661606232}
   type: 2
+  animator: {fileID: -327274416650200995}
+  spriteRenderer: {fileID: 6395177192233240816}
 --- !u!114 &5252338915410618526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,11 +190,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d3bc7e389f99f74e9d62ec90c33684b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
-  currentDef: 3
+  GetMonster: {fileID: 8306327278843671438}
   idle: {fileID: 67086829, guid: 766684eacba4a9d4baa57a826ff5d80c, type: 3}
   attacked: {fileID: 21300000, guid: 52f3ac22e6984354d819ea2c636f358e, type: 3}
-  HpBar: {fileID: 2725928161718974752}
+  HpBar: {fileID: 3308780818509311291}
   DamageNumber: {fileID: 3846934207182582310, guid: 6a1f6bc902a73e14f8aab4a9d74be380, type: 3}
 --- !u!114 &2198548991519588789
 MonoBehaviour:
@@ -201,12 +207,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf0069ef784442140bd880a4b477b03d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
-  target: {fileID: 0}
-  speed: 2
+  monster: {fileID: 8306327278843671438}
   GetSprite: {fileID: -1077971983, guid: 02762e8cb38b05c449922470c02055aa, type: 3}
-  index: 1
-  routes: []
 --- !u!114 &2607110414661606232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,19 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56d6d9facd4f83f44bd8e186c69f3136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 0}
---- !u!114 &7255248302507239661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 742786365673370705}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1eac8ca18898a62418654e46c083f7d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  weapon: {fileID: 2748694941218637823}
 --- !u!114 &7579029007793924407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,9 +235,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponRange: {fileID: 2748694941218637823}
-  damage: 50
-  pen: 1
-  cognitionRange: 1.6
 --- !u!114 &9025287916149946297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,9 +248,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 3632078191318328974, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
-  wallPos: []
-  tilemap: {fileID: 0}
-  walls: {fileID: 0}
 --- !u!95 &-327274416650200995
 Animator:
   serializedVersion: 5

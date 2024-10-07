@@ -3,41 +3,44 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class MonsterMovement : Monster
+public class MonsterMovement : MonoBehaviour
 {
     Vector3 dir;
     Vector3 lastTarget;
-    public Transform target;
-    Rigidbody2D rigid;
-    public float speed = 2f;
+    [SerializeField] Monster monster;
+    Transform target;
+    float speed = 2f;
     PathFinding PathFinding;
     Monster_BT _BT;
     Animator ani;
     SpriteRenderer spriteRenderer;
-    public Sprite GetSprite;
-    public int index = 1;
+    Rigidbody2D rigid;
+    [SerializeField] Sprite GetSprite;
+    int index = 1;
     bool plag = false;
 
     WaitForSeconds cachedFollowRouteSeconds = new WaitForSeconds(0.1f);
     WaitForSeconds cachedFindRouteSeconds = new WaitForSeconds(1f);
 
+    public float GetSpeed
+    {
+        get
+        {
+            return speed;
+        }
+    }
+
 #nullable enable
-    public List<Vector3>? routes;
+    List<Vector3>? routes;
     // Start is called before the first frame update
     void Start()
     {
-        PathFinding = GetComponent<PathFinding>();
-        rigid = GetComponent<Rigidbody2D>();
-        _BT = GetComponent<Monster_BT>();
-        ani = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        target = FindObjectOfType<Player>().transform;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        PathFinding = monster.GetPathFinding;
+        rigid = monster.GetRigidbody2D;
+        _BT = monster.GetMonster_BT;
+        ani = monster.GetAnimator;
+        spriteRenderer = monster.GetSpriteRenderer;
+        target = monster.GetPlayer.transform;
     }
 
     IEnumerator FollowRoute()
@@ -140,8 +143,6 @@ public class MonsterMovement : Monster
                     break;
                 }
         }
-
-        
     }
 
     

@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : Player
+public class PlayerMovement : MonoBehaviour
 {
     public GameObject Arm;
-    public float moveSpeed = 2;
+    Player GetPlayer;
+    float moveSpeed = 2;
     Rigidbody2D playerRigid;
     Animator ani;
     Vector2 dir;
-    public Vector2 dashDir;
+    Vector2 dashDir;
     public Transform armPosition;
     bool movedir = false; //1이면 우측 0이면 좌측
 
@@ -17,7 +18,7 @@ public class PlayerMovement : Player
 
     private void Start()
     {
-        playerRigid = GetComponent<Rigidbody2D>();
+        playerRigid = GetPlayer.GetRigidBody;
         ani = GetComponent<Animator>();
     }
 
@@ -26,12 +27,24 @@ public class PlayerMovement : Player
         get { return ClickValue; }
     }
 
+    public Vector2 GetDir
+    {
+        get { return dashDir; }
+        set { dashDir = value; }
+    }
+
+    public float GetSpeed
+    {
+        get { return moveSpeed; }
+        set { moveSpeed = value; }
+    }
+
     public bool Moved()
     {
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) ||
             Input.GetKey(KeyCode.D))
         {
-            GetPlayerState = PlayerState.Move;
+            Player.playerState = PlayerState.Move;
             if (Input.GetKey(KeyCode.A))
             {
                 movedir = false;
@@ -44,7 +57,7 @@ public class PlayerMovement : Player
         }
         else
         {
-            GetPlayerState = PlayerState.Idle;
+            Player.playerState = PlayerState.Idle;
             return false;
         }
     }
@@ -99,7 +112,7 @@ public class PlayerMovement : Player
         if (Input.GetKey(KeyCode.A))
         {
             dir.x = -moveSpeed;
-            spriteRenderer.flipX = false;
+            GetPlayer.GetSpriteRenderer.flipX = false;
             ClickValue *= 3;
         }
         if (Input.GetKey(KeyCode.S))
@@ -110,7 +123,7 @@ public class PlayerMovement : Player
         if (Input.GetKey(KeyCode.D))
         {
             dir.x = moveSpeed;
-            spriteRenderer.flipX = true;
+            GetPlayer.GetSpriteRenderer.flipX = true;
             ClickValue *= 7;
         }
         playerRigid.velocity = dir+dashDir;

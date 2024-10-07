@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class StandOffAttack : MonoBehaviour
+public class StandOffAttack : MonoBehaviour, IAttackType
 {
     public BulletData data;
     Player GetPlayer;
@@ -102,6 +102,11 @@ public class StandOffAttack : MonoBehaviour
             // 처음 맞은것에만 반응하는가?
             return Node.NodeState.SUCCESS;
         }
+        return Node.NodeState.FAILURE;
+    }
+
+    public Node.NodeState AttackLogic()
+    {
         return Node.NodeState.FAILURE;
     }
 }

@@ -14,27 +14,20 @@ public enum PlayerState
 public class Player : MonoBehaviour
 {
     public static PlayerState playerState;
-    PlayerMovement movement;
-    Rigidbody2D rigid;
-    PlayerHealth health;
-    PlayerArm arm;
-    Weapon weapon;
-    protected static SpriteRenderer spriteRenderer;
-    //public Excel_Info info;
+    [SerializeField] PlayerMovement movement;
+    [SerializeField] PlayerHealth health;
+    [SerializeField] PlayerArm arm;
+    [SerializeField] PlayerDash dash;
+    [SerializeField] PlayerStat stat;
+    [SerializeField] Animator animator;
+    [SerializeField] Weapon weapon;
+    [SerializeField] Rigidbody2D rigid;
+    [SerializeField] protected static SpriteRenderer spriteRenderer;
 
-    // Start is called before the first frame update
-    void Start()
+    public Animator GetAnimator
     {
-        movement = GetComponent<PlayerMovement>();
-        health = GetComponent<PlayerHealth>();
-        rigid = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        arm = GetComponent<PlayerArm>();
-        weapon = GetComponent<Weapon>();
-        //Debug.Log(info.Sheet1[0].name);
-        //Debug.Log(info.Sheet1[1].name);
+        get { return animator; }
     }
-
     public PlayerState GetPlayerState
     {
         get { return playerState;  }
@@ -44,6 +37,16 @@ public class Player : MonoBehaviour
     public Transform GetTransform
     {
         get { return transform; }
+    }
+
+    public PlayerDash GetDash
+    {
+        get { return dash; }
+    }
+
+    public PlayerStat GetStat
+    {
+        get { return stat; }
     }
 
     public PlayerMovement GetMovement
@@ -61,10 +64,9 @@ public class Player : MonoBehaviour
         get { return rigid; }
     }
 
-
-    public static bool GetFlip()
+    public SpriteRenderer GetSpriteRenderer
     {
-        return spriteRenderer.flipX;
+        get { return spriteRenderer; }
     }
 
     public void setFlip(bool f)

@@ -2,37 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-public class CloseAttack : MonoBehaviour
+public class CloseAttack : MonoBehaviour, IAttackType
 {
     Player GetPlayer;
+    Monster GetMonster;
     public GameObject weaponRange;
     Monster_BT _BT;
     SpriteRenderer monsterRenderer;
     BoxCollider2D boxCollider2D;
-    [SerializeField]
     int damage = 50;
-    [SerializeField]
     int pen = 1;
-    [SerializeField]
-    float cognitionRange= 1f; 
+    float cognitionRange= 1.6f; 
     float dist, x, y;
     // Start is called before the first frame update
     void Start()
     {
-        GetPlayer = FindObjectOfType<Player>();
-        _BT = GetComponent<Monster_BT>();
+        GetPlayer = GetMonster.GetPlayer;
+        _BT = GetMonster.GetMonster_BT;
         monsterRenderer = GetComponent<SpriteRenderer>();
         boxCollider2D = weaponRange.GetComponent<BoxCollider2D>();
         dist = Vector3.Distance(weaponRange.transform.position, transform.position);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    // ���Ͱ� ���ݹ����� �ִٸ� ����
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.TryGetComponent(out Monster monster))
@@ -72,5 +63,15 @@ public class CloseAttack : MonoBehaviour
         }
 
         return Node.NodeState.FAILURE;
+    }
+
+    public Node.NodeState AttackLogic()
+    {
+        return Node.NodeState.FAILURE;
+    }
+
+    public void SetAttack()
+    {
+
     }
 }
