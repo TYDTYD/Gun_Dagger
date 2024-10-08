@@ -8,5 +8,7 @@ public interface IAttackType
 
     Node.NodeState AttackLogic();
 
+    Node.NodeState AfterDelay();
+
     void SetAttack();
 }

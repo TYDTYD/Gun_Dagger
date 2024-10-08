@@ -29,20 +29,15 @@ public class Monster_BT : MonoBehaviour
         afterdelay,
         ready
     }
-    CloseAttack close;
-    StandOffAttack standOff;
     Monster monster;
     MonsterHealth health;
     MonsterMovement movement;
     List<Node> BT = new List<Node>();
     Selector damageSelector = new Selector(), delaySelector = new Selector(), groggiSelector = new Selector();
-    Execution attackChance, overGroggi, attack, delay, afterDelay, groggi, chase, roaming;
+    Execution attackChance, overGroggi, attack, afterDelay, groggi, chase, roaming;
     Sequence attackSequence = new Sequence();
-    bool isAttack = false;
-    float delayTime = 1;
     Rigidbody2D GetRigidbody2D;
     [SerializeField] GameObject weapon;
-    Animator animator;
 
     // Start is called before the first frame update
     void Start()
@@ -50,15 +45,15 @@ public class Monster_BT : MonoBehaviour
         health = monster.GetMonsterHealth;
         movement = monster.GetMonsterMovement;
         GetRigidbody2D = monster.GetRigidbody2D;
+
         chase = new Execution(movement.SetChase);
         groggi = new Execution(health.SetGroggi);
         overGroggi = new Execution(health.OverSetGroggi);
-        
         roaming = new Execution(SetRoaming);
-        afterDelay = new Execution(AfterDelay);
 
         if (TryGetComponent(out IAttackType attackType))
         {
+            afterDelay = new Execution(attackType.AfterDelay);
             attackChance = new Execution(attackType.Chance);
             attack = new Execution(attackType.AttackLogic);
         }
@@ -76,70 +71,6 @@ public class Monster_BT : MonoBehaviour
         groggiSelector.add(roaming);
     }
 
-    IEnumerator AttackWithDelay()
-    {
-        yield return new WaitForSeconds(delayTime);
-        if (TryGetComponent(out IAttackType attackType))
-            attackType.SetAttack();
-        state = State.afterdelay;
-        StartCoroutine(AttackAfterDelay());
-        yield return null;
-    }
-
-    IEnumerator AttackAfterDelay()
-    {
-        yield return new WaitForSeconds(delayTime);
-        if (close != null)
-        {
-            close.weaponRange.GetComponent<Collider2D>().enabled = false;
-        }
-        state = State.Idle;
-        yield return null;
-    }
-
-    Node.NodeState StandOffAttackLogic()
-    {
-        if (state == State.delay || state == State.attack || state == State.afterdelay)
-            return Node.NodeState.RUNNING;
-        state = State.delay;
-        StartCoroutine(AttackWithDelay());
-        if (!isAttack)
-        {
-            state = State.attack;
-        }
-        else
-            return Node.NodeState.RUNNING;
-        return Node.NodeState.SUCCESS;
-    }
-
-    // 공격 과정
-    Node.NodeState AttackLogic()
-    {
-        if (state == State.delay || state == State.attack || state==State.afterdelay)
-            return Node.NodeState.RUNNING;
-        state = State.delay;
-        close.weaponRange.GetComponent<SpriteRenderer>().enabled = true;
-        GetRigidbody2D.velocity = Vector2.zero;
-        if (!isAttack)
-        {
-            state = State.attack;
-            StartCoroutine(AttackWithDelay());
-        }
-        else
-            return Node.NodeState.RUNNING;
-        return Node.NodeState.SUCCESS;
-    }
-
-    Node.NodeState AfterDelay()
-    {
-        if (state != State.afterdelay)
-            return Node.NodeState.FAILURE;
-        StartCoroutine(AttackAfterDelay());
-        state = State.Idle;
-
-        return Node.NodeState.SUCCESS;
-    }
-
     bool rotation = true;
     IEnumerator StartRandom()
     {
@@ -148,8 +79,6 @@ public class Monster_BT : MonoBehaviour
         int randR = UnityEngine.Random.Range(-1, 2);
         if (rotation)
         {
-            Debug.Log(randL);
-            Debug.Log(randR);
             rotation = false;
             GetRigidbody2D.velocity = new Vector2(randL * speed, randR * speed);
             yield return new WaitForSeconds(1f);

@@ -5,14 +5,16 @@ using UnityEngine.UI;
 
 public class PlayerStat : MonoBehaviour
 {
+    Player GetPlayer;
     PlayerHealth health;
     Weapon weapon;
-    public Text stat;
+    [SerializeField] Text stat;
+    Vector3 diff = new Vector3(0, 0, 10);
     // Start is called before the first frame update
     void Start()
     {
-        health = GetComponent<PlayerHealth>();
-        weapon = GetComponent<Weapon>();
+        health = GetPlayer.GetHealth;
+        weapon = GetPlayer.GetWeapon;
     }
 
     // Update is called once per frame
@@ -22,7 +24,7 @@ public class PlayerStat : MonoBehaviour
             stat.text = "µ· : " + GameManager.Instance.money+ "\n"
                                +"Åº ¼ö : " + weapon.GetCollectionBulletNum + "\n";
         }
-        stat.transform.position = Camera.main.transform.position + new Vector3(0, 0, 10);
+        stat.transform.position = Camera.main.transform.position + diff;
         if (Input.GetKey(KeyCode.Tab))
         {
             stat.gameObject.SetActive(true);

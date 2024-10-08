@@ -7,12 +7,15 @@ public class StandOffAttack : MonoBehaviour, IAttackType
 {
     public BulletData data;
     Player GetPlayer;
+    bool isAttack = false;
     bool cycle = true;
     float delay = 0.5f;
+    float delayTime = 1f;
     float cycleTime = 0.1f;
     int reloadTime = 3;
     int bulletNum = 6;
     LineRenderer line;
+    Collider2D GetCollider2D;
     Monster_BT _BT;
     Vector2 targetPos;
     // Start is called before the first frame update
@@ -34,7 +37,6 @@ public class StandOffAttack : MonoBehaviour, IAttackType
         // 积己林扁 0.1檬 瘤车阑 矫 醚舅 积己
         if (cycle && bulletNum != 0)
         {
-            
             cycle = false;
             bulletNum--;
             _BT.GetState = Monster_BT.State.attack;
@@ -107,6 +109,39 @@ public class StandOffAttack : MonoBehaviour, IAttackType
 
     public Node.NodeState AttackLogic()
     {
-        return Node.NodeState.FAILURE;
+        if (_BT.GetState == Monster_BT.State.delay || _BT.GetState == Monster_BT.State.attack || _BT.GetState == Monster_BT.State.afterdelay)
+            return Node.NodeState.RUNNING;
+        _BT.GetState = Monster_BT.State.delay;
+        StartCoroutine(AttackWithDelay());
+        _BT.GetState = Monster_BT.State.attack;
+        return Node.NodeState.SUCCESS;
+    }
+
+    IEnumerator AttackWithDelay()
+    {
+        yield return new WaitForSeconds(delayTime);
+        if (TryGetComponent(out IAttackType attackType))
+            attackType.SetAttack();
+        _BT.GetState = Monster_BT.State.afterdelay;
+        StartCoroutine(AttackAfterDelay());
+        yield return null;
+    }
+
+    IEnumerator AttackAfterDelay()
+    {
+        yield return new WaitForSeconds(delayTime);
+        GetCollider2D.enabled = false;
+        _BT.GetState = Monster_BT.State.delay;
+        yield return null;
+    }
+
+    public Node.NodeState AfterDelay()
+    {
+        if (_BT.GetState != Monster_BT.State.afterdelay)
+            return Node.NodeState.FAILURE;
+        StartCoroutine(AttackAfterDelay());
+        _BT.GetState = Monster_BT.State.Idle;
+
+        return Node.NodeState.SUCCESS;
     }
 }

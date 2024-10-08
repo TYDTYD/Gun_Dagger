@@ -40,7 +40,7 @@ public class Weapon : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        dagger = GetComponentInChildren<Dagger>();
+        //dagger;
         weapons.Add(dagger);
         weapons.Add(Gun);
         reloadTime = rangeWeaponData.reloadTime;
@@ -86,15 +86,15 @@ public class Weapon : MonoBehaviour
                 dagger.gameObject.SetActive(false);
                 Gun.gameObject.SetActive(true);
                 isDagger = false;
-                ProjectileSpawner gun = Gun as ProjectileSpawner;
+                //ProjectileSpawner gun = Gun as ProjectileSpawner;
             }
             else
             {
                 Gun.gameObject.SetActive(false);
                 dagger.gameObject.SetActive(true);
                 isDagger = true;
-                Dagger dag = dagger as Dagger;
-                StartCoroutine(dag.Attack(1));
+                //Dagger dag = dagger;
+                //StartCoroutine(dag.Attack(1));
             }
             isChanged = false;
         }

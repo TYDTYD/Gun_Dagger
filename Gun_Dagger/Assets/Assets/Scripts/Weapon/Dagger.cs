@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Dagger : Weapon
+public class Dagger : MonoBehaviour
 {
     SpriteRenderer render;
     Player GetPlayer;

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dagger_HitBox : Dagger
+public class Dagger_HitBox : MonoBehaviour
 {
     Collider2D hitboxCollider;
     RaycastHit2D[] result = new RaycastHit2D[10];
@@ -12,19 +12,20 @@ public class Dagger_HitBox : Dagger
     public Transform hitboxPosition;
     Vector2 h_mouse;
     BoxCollider2D BoxCollider;
-    
+    [SerializeField] Player player;
     float distFix;
+    float damage;
+
     // Start is called before the first frame update
     void Start()
     {
-        player = GetComponentInParent<Player>();
         hitboxCollider = GetComponent<Collider2D>();
-        GetDagger.AttckEvent += DamageList;
+        //GetDagger.AttckEvent += DamageList;
         BoxCollider = GetComponent<BoxCollider2D>();
         
 
-        BoxCollider.size = new Vector2(meleeWeaponData.attackRangeR, meleeWeaponData.attackRangeW);
-        distFix = (meleeWeaponData.attackRangeR -1)/2+1;
+        //BoxCollider.size = new Vector2(meleeWeaponData.attackRangeR, meleeWeaponData.attackRangeW);
+        //distFix = (meleeWeaponData.attackRangeR -1)/2+1;
     }
 
     private void Update()
@@ -53,7 +54,7 @@ public class Dagger_HitBox : Dagger
     // Update is called once per frame
     void DamageList()
     {
-        int currentPen = pen;
+        int currentPen = 0;// pen;
         // 피격 범위에 들어온 오브젝트 순환
         foreach(GameObject obj in indexList.Keys)
         {
@@ -81,8 +82,6 @@ public class Dagger_HitBox : Dagger
             }
             // 계산된 관통력으로 적에게 데미지 주기
             indexList[obj].TakeDamage(damage, currentPen);
-
-            
         }
         particleManagement.PlayParticle(transform.position + new Vector3(0,1), 3, new Vector2(Mathf.Cos(hitboxAngle * Mathf.Deg2Rad), Mathf.Sin(hitboxAngle * Mathf.Deg2Rad)));
     }

@@ -11,6 +11,7 @@ public class CloseAttack : MonoBehaviour, IAttackType
     SpriteRenderer monsterRenderer;
     BoxCollider2D boxCollider2D;
     int damage = 50;
+    float delayTime = 1f;
     int pen = 1;
     float cognitionRange= 1.6f; 
     float dist, x, y;
@@ -26,7 +27,7 @@ public class CloseAttack : MonoBehaviour, IAttackType
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent(out Monster monster))
+        if (collision.TryGetComponent(out Monster _))
             return;
         if (collision.TryGetComponent(out IHealthSystem health))
         {
@@ -65,13 +66,49 @@ public class CloseAttack : MonoBehaviour, IAttackType
         return Node.NodeState.FAILURE;
     }
 
+    IEnumerator AttackWithDelay()
+    {
+        yield return new WaitForSeconds(delayTime);
+        if (TryGetComponent(out IAttackType attackType))
+            attackType.SetAttack();
+        _BT.GetState = Monster_BT.State.afterdelay;
+        StartCoroutine(AttackAfterDelay());
+        yield return null;
+    }
+
     public Node.NodeState AttackLogic()
     {
-        return Node.NodeState.FAILURE;
+        if (_BT.GetState == Monster_BT.State.delay || _BT.GetState == Monster_BT.State.attack || _BT.GetState == Monster_BT.State.afterdelay)
+            return Node.NodeState.RUNNING;
+        _BT.GetState = Monster_BT.State.delay;
+        weaponRange.GetComponent<SpriteRenderer>().enabled = true;
+        GetPlayer.GetRigidBody.velocity = Vector2.zero;
+
+        _BT.GetState = Monster_BT.State.attack;
+        StartCoroutine(AttackWithDelay());
+
+        return Node.NodeState.SUCCESS;
     }
 
     public void SetAttack()
     {
 
+    }
+    IEnumerator AttackAfterDelay()
+    {
+        yield return new WaitForSeconds(delayTime);
+        boxCollider2D.enabled = false;
+        _BT.GetState = Monster_BT.State.delay;
+        yield return null;
+    }
+
+    public Node.NodeState AfterDelay()
+    {
+        if (_BT.GetState != Monster_BT.State.afterdelay)
+            return Node.NodeState.FAILURE;
+        StartCoroutine(AttackAfterDelay());
+        _BT.GetState = Monster_BT.State.Idle;
+
+        return Node.NodeState.SUCCESS;
     }
 }

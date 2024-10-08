@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 // 총알을 발사하는 객체
 
-public class ProjectileSpawner : Weapon
+public class ProjectileSpawner : MonoBehaviour
 {
     private void OnEnable()
     {
