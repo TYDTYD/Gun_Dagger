@@ -6,7 +6,6 @@ using System;
 // 몬스터 관련 함수
 public class Monster : MonoBehaviour
 {
-    [SerializeField] monsterData GetMonsterData;
     [SerializeField] MonsterHealth monsterHealth;
     [SerializeField] MonsterMovement monsterMovement;
     [SerializeField] PathFinding pathFinding;
@@ -17,7 +16,7 @@ public class Monster : MonoBehaviour
     [SerializeField] SpriteRenderer spriteRenderer;
     Player player;
 
-    private void Start()
+    protected virtual void Start()
     {
         player = FindObjectOfType<Player>();
     }
@@ -97,4 +96,26 @@ public class Monster : MonoBehaviour
             return Rigidbody;
         }
     }
+
+
+    public virtual Node.NodeState Chance()
+    {
+        return Node.NodeState.FAILURE;
+    }
+
+    public virtual Node.NodeState AttackLogic()
+    {
+        return Node.NodeState.FAILURE;
+    }
+
+    public virtual Node.NodeState AfterDelay()
+    {
+        return Node.NodeState.FAILURE;
+    }
+
+    public virtual void SetAttack()
+    {
+        return;
+    }
+
 }

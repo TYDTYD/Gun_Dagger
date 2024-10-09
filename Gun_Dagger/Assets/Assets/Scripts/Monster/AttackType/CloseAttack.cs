@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-public class CloseAttack : MonoBehaviour, IAttackType
+public class CloseAttack : Monster
 {
-    Player GetPlayer;
-    Monster GetMonster;
     public GameObject weaponRange;
     Monster_BT _BT;
     SpriteRenderer monsterRenderer;
@@ -16,10 +14,10 @@ public class CloseAttack : MonoBehaviour, IAttackType
     float cognitionRange= 1.6f; 
     float dist, x, y;
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        GetPlayer = GetMonster.GetPlayer;
-        _BT = GetMonster.GetMonster_BT;
+        base.Start();
+        _BT = GetMonster_BT;
         monsterRenderer = GetComponent<SpriteRenderer>();
         boxCollider2D = weaponRange.GetComponent<BoxCollider2D>();
         dist = Vector3.Distance(weaponRange.transform.position, transform.position);
@@ -38,7 +36,7 @@ public class CloseAttack : MonoBehaviour, IAttackType
         }
     }
 
-    public Node.NodeState Chance()
+    public override Node.NodeState Chance()
     {
         if (_BT.GetState == Monster_BT.State.ready || _BT.GetState == Monster_BT.State.delay ||
             _BT.GetState == Monster_BT.State.afterdelay || _BT.GetState == Monster_BT.State.attack)
@@ -66,17 +64,21 @@ public class CloseAttack : MonoBehaviour, IAttackType
         return Node.NodeState.FAILURE;
     }
 
+    public override void SetAttack()
+    {
+        weaponRange.GetComponent<SpriteRenderer>().enabled = false;
+    }
+
     IEnumerator AttackWithDelay()
     {
         yield return new WaitForSeconds(delayTime);
-        if (TryGetComponent(out IAttackType attackType))
-            attackType.SetAttack();
+        SetAttack();
         _BT.GetState = Monster_BT.State.afterdelay;
         StartCoroutine(AttackAfterDelay());
         yield return null;
     }
 
-    public Node.NodeState AttackLogic()
+    public override Node.NodeState AttackLogic()
     {
         if (_BT.GetState == Monster_BT.State.delay || _BT.GetState == Monster_BT.State.attack || _BT.GetState == Monster_BT.State.afterdelay)
             return Node.NodeState.RUNNING;
@@ -90,19 +92,15 @@ public class CloseAttack : MonoBehaviour, IAttackType
         return Node.NodeState.SUCCESS;
     }
 
-    public void SetAttack()
-    {
-
-    }
     IEnumerator AttackAfterDelay()
     {
         yield return new WaitForSeconds(delayTime);
         boxCollider2D.enabled = false;
-        _BT.GetState = Monster_BT.State.delay;
+        _BT.GetState = Monster_BT.State.Idle;
         yield return null;
     }
 
-    public Node.NodeState AfterDelay()
+    public override Node.NodeState AfterDelay()
     {
         if (_BT.GetState != Monster_BT.State.afterdelay)
             return Node.NodeState.FAILURE;

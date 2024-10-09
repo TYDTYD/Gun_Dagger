@@ -751,7 +751,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rangeWeaponData: {fileID: 11400000, guid: 7c41878537908c0459f06f408fffe505, type: 2}
-  Gun: {fileID: 8472719180613253154}
+  Gun: {fileID: 4436237657120195325}
   BulletNumText: {fileID: 0}
   bulletState: {fileID: 0}
   data: {fileID: 11400000, guid: 66d521942d60ed6429e02dcb0774fb9f, type: 2}
@@ -1060,17 +1060,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecb9cb17bc3c34940b1e3ff3a2d1789b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rangeWeaponData: {fileID: 0}
-  Gun: {fileID: 0}
-  BulletNumText: {fileID: 0}
-  bulletState: {fileID: 0}
-  data: {fileID: 0}
-  light2d: {fileID: 0}
-  DNumber: {fileID: 0}
-  GetDagger: {fileID: 5590808199729170619}
-  ani_Transform: {fileID: 0}
-  meleeWeaponData: {fileID: 11400000, guid: 978a75a08646199478d9533a6bbbf24a, type: 2}
   hitboxPosition: {fileID: 7080953457546946791}
+  player: {fileID: 0}
 --- !u!1 &7058179597623406530
 GameObject:
   m_ObjectHideFlags: 0
@@ -1244,13 +1235,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65abe3d232dd20e49910aed5e1b809d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rangeWeaponData: {fileID: 11400000, guid: edda34e9e55a66f47880cc5e04177f4f, type: 2}
-  Gun: {fileID: 4952400371197060251}
-  BulletNumText: {fileID: 0}
-  bulletState: {fileID: 0}
-  data: {fileID: 11400000, guid: 66d521942d60ed6429e02dcb0774fb9f, type: 2}
-  light2d: {fileID: 2689219413029778480}
-  DNumber: {fileID: 0}
   GetDagger: {fileID: 5590808199729170619}
   ani_Transform: {fileID: 7080953457546946791}
   meleeWeaponData: {fileID: 11400000, guid: 978a75a08646199478d9533a6bbbf24a, type: 2}
@@ -1374,13 +1358,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84bbdbf6261bb7f48bb1a89b1830771a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rangeWeaponData: {fileID: 11400000, guid: 7c41878537908c0459f06f408fffe505, type: 2}
-  Gun: {fileID: 0}
-  BulletNumText: {fileID: 0}
-  bulletState: {fileID: 0}
-  data: {fileID: 0}
-  light2d: {fileID: 0}
-  DNumber: {fileID: 0}
 --- !u!114 &8472719180613253154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1393,10 +1370,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84bbdbf6261bb7f48bb1a89b1830771a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rangeWeaponData: {fileID: 0}
-  Gun: {fileID: 0}
-  BulletNumText: {fileID: 0}
-  bulletState: {fileID: 0}
-  data: {fileID: 0}
-  light2d: {fileID: 0}
-  DNumber: {fileID: 0}

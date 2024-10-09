@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerStat : MonoBehaviour
 {
-    Player GetPlayer;
+    [SerializeField] Player GetPlayer;
     PlayerHealth health;
     Weapon weapon;
     [SerializeField] Text stat;

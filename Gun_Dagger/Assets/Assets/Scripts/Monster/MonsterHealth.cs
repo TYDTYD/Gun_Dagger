@@ -161,7 +161,7 @@ public class MonsterHealth : MonoBehaviour, IHealthSystem
         if (groggiTime > 0.5f)
         {
             GetMonster.GetMonster_BT.GetState = Monster_BT.State.groggi;
-            StartCoroutine(Groggi(groggiplusTime));
+            StartCoroutine(Groggi(groggiTime));
             return Node.NodeState.SUCCESS;
         }
         return Node.NodeState.FAILURE;

@@ -22,8 +22,13 @@ public class Player : MonoBehaviour
     [SerializeField] Animator animator;
     [SerializeField] Weapon weapon;
     [SerializeField] Rigidbody2D rigid;
-    [SerializeField] protected static SpriteRenderer spriteRenderer;
+    [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] Dagger dagger;
 
+    public Dagger GetDagger
+    {
+        get { return dagger; }
+    }
     public Animator GetAnimator
     {
         get { return animator; }

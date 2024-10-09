@@ -11,9 +11,8 @@ public class Weapon : MonoBehaviour
     // 무기 담는 리스트
     //[SerializeField]
     public WeaponData rangeWeaponData;
-    List<Weapon> weapons = new List<Weapon>();
-    Weapon dagger;
-    public Weapon Gun;
+    [SerializeField] Dagger dagger;
+    public ProjectileSpawner Gun;
     float WeaponChangeTime = 0f;
     protected bool isDagger = true;
     bool isChanged = false;
@@ -40,9 +39,6 @@ public class Weapon : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //dagger;
-        weapons.Add(dagger);
-        weapons.Add(Gun);
         reloadTime = rangeWeaponData.reloadTime;
         bulletNum = rangeWeaponData.bulletCount;
         cycleTime = rangeWeaponData.fireRate;
@@ -83,18 +79,14 @@ public class Weapon : MonoBehaviour
             yield return new WaitForSeconds(WeaponChangeTime);
             if (isDagger)
             {
-                dagger.gameObject.SetActive(false);
                 Gun.gameObject.SetActive(true);
                 isDagger = false;
-                //ProjectileSpawner gun = Gun as ProjectileSpawner;
             }
             else
             {
                 Gun.gameObject.SetActive(false);
-                dagger.gameObject.SetActive(true);
                 isDagger = true;
-                //Dagger dag = dagger;
-                //StartCoroutine(dag.Attack(1));
+                StartCoroutine(dagger.Attack(1));
             }
             isChanged = false;
         }

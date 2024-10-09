@@ -354,13 +354,11 @@ GameObject:
   - component: {fileID: 9124392672918017347}
   - component: {fileID: 1424626034139446452}
   - component: {fileID: 7386933902495582175}
-  - component: {fileID: 7214621595659786840}
+  - component: {fileID: 8676211849991127583}
   - component: {fileID: 5140319530495900872}
   - component: {fileID: 8762833491569794403}
   - component: {fileID: 7341772615310132355}
-  - component: {fileID: 3659665420582354864}
   - component: {fileID: 1423749555844678402}
-  - component: {fileID: 8676211849991127583}
   - component: {fileID: 5549950863054394050}
   m_Layer: 3
   m_Name: Gunslinger
@@ -603,7 +601,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!114 &7214621595659786840
+--- !u!114 &8676211849991127583
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -612,10 +610,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 7797127334490555948}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ae6ff5740c88114fb36bf4c78cafa5b, type: 3}
+  m_Script: {fileID: 11500000, guid: 8591590d8b625f94cb61cb8e25796835, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterHealth: {fileID: 5140319530495900872}
+  monsterMovement: {fileID: 8762833491569794403}
+  pathFinding: {fileID: 1423749555844678402}
+  Rigidbody: {fileID: 1424626034139446452}
+  Monster_bt: {fileID: 7341772615310132355}
   type: 0
+  animator: {fileID: 5549950863054394050}
+  spriteRenderer: {fileID: 879308098821174402}
+  data: {fileID: 11400000, guid: fd716ea7dc491a84faf44720242fe937, type: 2}
 --- !u!114 &5140319530495900872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -628,11 +634,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d3bc7e389f99f74e9d62ec90c33684b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
-  currentDef: 1
+  GetMonster: {fileID: 8676211849991127583}
   idle: {fileID: 1914957903, guid: c67921f6660ce4b46ae30f15b1717f8b, type: 3}
   attacked: {fileID: 21300000, guid: bb430a072401a6b4fa83924124cde99e, type: 3}
-  HpBar: {fileID: 6556215642329092242}
+  HpBar: {fileID: 878501509756385123}
   DamageNumber: {fileID: 3846934207182582310, guid: 6a1f6bc902a73e14f8aab4a9d74be380, type: 3}
 --- !u!114 &8762833491569794403
 MonoBehaviour:
@@ -646,12 +651,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf0069ef784442140bd880a4b477b03d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
-  target: {fileID: 0}
-  speed: 2
+  monster: {fileID: 8676211849991127583}
   GetSprite: {fileID: 21300000, guid: bb430a072401a6b4fa83924124cde99e, type: 3}
-  index: 1
-  routes: []
 --- !u!114 &7341772615310132355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -664,19 +665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56d6d9facd4f83f44bd8e186c69f3136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 0}
---- !u!114 &3659665420582354864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7797127334490555948}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed6bbad08119cf748a6eb7e168c19eb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  GetMonster: {fileID: 8676211849991127583}
 --- !u!114 &1423749555844678402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -690,22 +679,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 3632078191318328974, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
-  wallPos: []
-  tilemap: {fileID: 0}
-  walls: {fileID: 0}
---- !u!114 &8676211849991127583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7797127334490555948}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8591590d8b625f94cb61cb8e25796835, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: fd716ea7dc491a84faf44720242fe937, type: 2}
 --- !u!95 &5549950863054394050
 Animator:
   serializedVersion: 5

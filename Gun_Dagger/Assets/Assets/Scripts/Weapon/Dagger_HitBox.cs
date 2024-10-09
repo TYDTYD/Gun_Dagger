@@ -15,17 +15,16 @@ public class Dagger_HitBox : MonoBehaviour
     [SerializeField] Player player;
     float distFix;
     float damage;
-
     // Start is called before the first frame update
     void Start()
     {
         hitboxCollider = GetComponent<Collider2D>();
-        //GetDagger.AttckEvent += DamageList;
+        player.GetDagger.AttckEvent += DamageList;
         BoxCollider = GetComponent<BoxCollider2D>();
-        
 
-        //BoxCollider.size = new Vector2(meleeWeaponData.attackRangeR, meleeWeaponData.attackRangeW);
-        //distFix = (meleeWeaponData.attackRangeR -1)/2+1;
+        damage = player.GetDagger.GetDamage;
+        BoxCollider.size = new Vector2(player.GetDagger.meleeWeaponData.attackRangeR, player.GetDagger.meleeWeaponData.attackRangeW);
+        distFix = (player.GetDagger.meleeWeaponData.attackRangeR -1)/2+1;
     }
 
     private void Update()
@@ -33,7 +32,7 @@ public class Dagger_HitBox : MonoBehaviour
         // 마우스 방향따라 회전
         h_mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         hitboxAngle = Mathf.Atan2(h_mouse.y - player.transform.position.y, h_mouse.x - player.transform.position.x) * Mathf.Rad2Deg;
-
+        
         transform.rotation = Quaternion.AngleAxis(hitboxAngle, Vector3.forward);
         float x = Mathf.Cos(hitboxAngle * Mathf.PI / 180f);
         float y = Mathf.Sin(hitboxAngle * Mathf.PI / 180f);
@@ -54,7 +53,7 @@ public class Dagger_HitBox : MonoBehaviour
     // Update is called once per frame
     void DamageList()
     {
-        int currentPen = 0;// pen;
+        int currentPen = player.GetDagger.GetPen;
         // 피격 범위에 들어온 오브젝트 순환
         foreach(GameObject obj in indexList.Keys)
         {
@@ -82,6 +81,7 @@ public class Dagger_HitBox : MonoBehaviour
             }
             // 계산된 관통력으로 적에게 데미지 주기
             indexList[obj].TakeDamage(damage, currentPen);
+            Debug.Log((obj, damage));
         }
         particleManagement.PlayParticle(transform.position + new Vector3(0,1), 3, new Vector2(Mathf.Cos(hitboxAngle * Mathf.Deg2Rad), Mathf.Sin(hitboxAngle * Mathf.Deg2Rad)));
     }

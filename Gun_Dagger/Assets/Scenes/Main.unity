@@ -764,6 +764,22 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1430255581201615825, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
   m_PrefabInstance: {fileID: 1237102351}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &44034519 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8165655174042826360, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
+  m_PrefabInstance: {fileID: 1237102351}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3ff0fd9c73e354b8497f44c1c3c46d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!212 &44034522 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 16924491806567075, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
+  m_PrefabInstance: {fileID: 1237102351}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &44595052
 GameObject:
   m_ObjectHideFlags: 0
@@ -4504,6 +4520,17 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &550952157 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5590808199729170619, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
+  m_PrefabInstance: {fileID: 1237102351}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65abe3d232dd20e49910aed5e1b809d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &555021788
 Mesh:
   m_ObjectHideFlags: 0
@@ -10261,6 +10288,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1133138787}
   m_CullTransparentMesh: 1
+--- !u!114 &1159074252 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1556341902987737078, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
+  m_PrefabInstance: {fileID: 1237102351}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84bbdbf6261bb7f48bb1a89b1830771a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1164985570
 GameObject:
   m_ObjectHideFlags: 0
@@ -10879,10 +10917,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 3632078191318328974, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 4436237657120195325, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
+      propertyPath: Gun
+      value: 
+      objectReference: {fileID: 1159074252}
+    - target: {fileID: 4436237657120195325, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
+      propertyPath: dagger
+      value: 
+      objectReference: {fileID: 550952157}
     - target: {fileID: 4436237657120195325, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
       propertyPath: bulletState
       value: 
@@ -10891,10 +10933,26 @@ PrefabInstance:
       propertyPath: BulletNumText
       value: 
       objectReference: {fileID: 1133138789}
+    - target: {fileID: 4952400371197060251, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 44034519}
+    - target: {fileID: 5590808199729170619, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
+      propertyPath: GetPlayer
+      value: 
+      objectReference: {fileID: 44034519}
     - target: {fileID: 6144096316385994725, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
       propertyPath: stat
       value: 
       objectReference: {fileID: 1706335340}
+    - target: {fileID: 6144096316385994725, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
+      propertyPath: GetPlayer
+      value: 
+      objectReference: {fileID: 44034519}
+    - target: {fileID: 6409405122493723018, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
+      propertyPath: GetPlayer
+      value: 
+      objectReference: {fileID: 44034519}
     - target: {fileID: 7487230516730150645, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -10903,6 +10961,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8165655174042826360, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
+      propertyPath: dagger
+      value: 
+      objectReference: {fileID: 550952157}
+    - target: {fileID: 8165655174042826360, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
+      propertyPath: spriteRenderer
+      value: 
+      objectReference: {fileID: 44034522}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

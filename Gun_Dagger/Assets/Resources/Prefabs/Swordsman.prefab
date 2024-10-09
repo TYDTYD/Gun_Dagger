@@ -12,13 +12,11 @@ GameObject:
   - component: {fileID: 2576167978109887474}
   - component: {fileID: 6885840428865951947}
   - component: {fileID: 4273117492579109252}
-  - component: {fileID: 4279513476761759939}
+  - component: {fileID: 8374272181940584990}
   - component: {fileID: 3849085770795749499}
   - component: {fileID: 6492959403021460485}
   - component: {fileID: 7364174323844730994}
-  - component: {fileID: 5425882132524949037}
   - component: {fileID: 8431426139663670363}
-  - component: {fileID: 8374272181940584990}
   - component: {fileID: -4273510612629200834}
   m_Layer: 3
   m_Name: Swordsman
@@ -158,7 +156,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &4279513476761759939
+--- !u!114 &8374272181940584990
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -167,10 +165,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 254429167652683444}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ae6ff5740c88114fb36bf4c78cafa5b, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b6575a932f1ec84ca6e05e022819126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  monsterHealth: {fileID: 3849085770795749499}
+  monsterMovement: {fileID: 6492959403021460485}
+  pathFinding: {fileID: 8431426139663670363}
+  Rigidbody: {fileID: 4273117492579109252}
+  Monster_bt: {fileID: 7364174323844730994}
+  type: 0
+  animator: {fileID: -4273510612629200834}
+  spriteRenderer: {fileID: 2576167978109887474}
+  weaponRange: {fileID: 1179705614680144001}
 --- !u!114 &3849085770795749499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,11 +189,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d3bc7e389f99f74e9d62ec90c33684b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  currentDef: 3
+  GetMonster: {fileID: 8374272181940584990}
   idle: {fileID: -1875364938, guid: 33ad21533e9b6ef4e88de03cb2ff99f5, type: 3}
   attacked: {fileID: 21300000, guid: 16eb0c3623b94ed4295ec3e45817f5b1, type: 3}
-  HpBar: {fileID: 3873189097500439196}
+  HpBar: {fileID: 8358124968050488209}
   DamageNumber: {fileID: 3846934207182582310, guid: 6a1f6bc902a73e14f8aab4a9d74be380, type: 3}
 --- !u!114 &6492959403021460485
 MonoBehaviour:
@@ -201,12 +206,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf0069ef784442140bd880a4b477b03d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  target: {fileID: 0}
-  speed: 2
+  monster: {fileID: 8374272181940584990}
   GetSprite: {fileID: 21300000, guid: 16eb0c3623b94ed4295ec3e45817f5b1, type: 3}
-  index: 1
-  routes: []
 --- !u!114 &7364174323844730994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,19 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56d6d9facd4f83f44bd8e186c69f3136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 0}
---- !u!114 &5425882132524949037
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 254429167652683444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1eac8ca18898a62418654e46c083f7d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  GetMonster: {fileID: 8374272181940584990}
 --- !u!114 &8431426139663670363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,25 +234,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 3632078191318328974, guid: 12d1c5bc190f9804393f1bad73280a4b, type: 3}
-  wallPos: []
-  tilemap: {fileID: 0}
-  walls: {fileID: 0}
---- !u!114 &8374272181940584990
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 254429167652683444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b6575a932f1ec84ca6e05e022819126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponRange: {fileID: 1179705614680144001}
-  damage: 50
-  pen: 1
-  cognitionRange: 1.6
 --- !u!95 &-4273510612629200834
 Animator:
   serializedVersion: 5

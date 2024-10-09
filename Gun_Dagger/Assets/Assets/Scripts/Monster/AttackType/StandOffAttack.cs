@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class StandOffAttack : MonoBehaviour, IAttackType
+public class StandOffAttack : Monster
 {
     public BulletData data;
-    Player GetPlayer;
-    bool isAttack = false;
     bool cycle = true;
     float delay = 0.5f;
     float delayTime = 1f;
@@ -15,15 +13,14 @@ public class StandOffAttack : MonoBehaviour, IAttackType
     int reloadTime = 3;
     int bulletNum = 6;
     LineRenderer line;
-    Collider2D GetCollider2D;
     Monster_BT _BT;
     Vector2 targetPos;
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        GetPlayer = FindObjectOfType<Player>();
+        base.Start();
         line = GetComponent<LineRenderer>();
-        _BT = GetComponent<Monster_BT>();
+        _BT = GetMonster_BT;
     }
 
     // Update is called once per frame
@@ -82,13 +79,13 @@ public class StandOffAttack : MonoBehaviour, IAttackType
         bullet.GetComponent<Rigidbody2D>().AddForce(direction.normalized * data.bulletSpeed);
     }
 
-    public void SetAttack()
+    public override void SetAttack()
     {
         StartCoroutine(Shoot());
         return;
     }
 
-    public Node.NodeState Chance()
+    public override Node.NodeState Chance()
     {
         
         if (_BT.GetState == Monster_BT.State.ready || _BT.GetState == Monster_BT.State.delay ||
@@ -107,7 +104,7 @@ public class StandOffAttack : MonoBehaviour, IAttackType
         return Node.NodeState.FAILURE;
     }
 
-    public Node.NodeState AttackLogic()
+    public override Node.NodeState AttackLogic()
     {
         if (_BT.GetState == Monster_BT.State.delay || _BT.GetState == Monster_BT.State.attack || _BT.GetState == Monster_BT.State.afterdelay)
             return Node.NodeState.RUNNING;
@@ -120,22 +117,21 @@ public class StandOffAttack : MonoBehaviour, IAttackType
     IEnumerator AttackWithDelay()
     {
         yield return new WaitForSeconds(delayTime);
-        if (TryGetComponent(out IAttackType attackType))
-            attackType.SetAttack();
-        _BT.GetState = Monster_BT.State.afterdelay;
+        SetAttack();
+        _BT.GetState = Monster_BT.State.delay;
         StartCoroutine(AttackAfterDelay());
         yield return null;
     }
 
     IEnumerator AttackAfterDelay()
     {
+        _BT.GetState = Monster_BT.State.afterdelay;
         yield return new WaitForSeconds(delayTime);
-        GetCollider2D.enabled = false;
-        _BT.GetState = Monster_BT.State.delay;
+        _BT.GetState = Monster_BT.State.Idle;
         yield return null;
     }
 
-    public Node.NodeState AfterDelay()
+    public override Node.NodeState AfterDelay()
     {
         if (_BT.GetState != Monster_BT.State.afterdelay)
             return Node.NodeState.FAILURE;

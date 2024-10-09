@@ -29,7 +29,7 @@ public class Monster_BT : MonoBehaviour
         afterdelay,
         ready
     }
-    Monster monster;
+    [SerializeField] Monster GetMonster;
     MonsterHealth health;
     MonsterMovement movement;
     List<Node> BT = new List<Node>();
@@ -37,25 +37,24 @@ public class Monster_BT : MonoBehaviour
     Execution attackChance, overGroggi, attack, afterDelay, groggi, chase, roaming;
     Sequence attackSequence = new Sequence();
     Rigidbody2D GetRigidbody2D;
-    [SerializeField] GameObject weapon;
 
     // Start is called before the first frame update
     void Start()
     {
-        health = monster.GetMonsterHealth;
-        movement = monster.GetMonsterMovement;
-        GetRigidbody2D = monster.GetRigidbody2D;
+        health = GetMonster.GetMonsterHealth;
+        movement = GetMonster.GetMonsterMovement;
+        GetRigidbody2D = GetMonster.GetRigidbody2D;
 
         chase = new Execution(movement.SetChase);
         groggi = new Execution(health.SetGroggi);
         overGroggi = new Execution(health.OverSetGroggi);
         roaming = new Execution(SetRoaming);
 
-        if (TryGetComponent(out IAttackType attackType))
+        if (TryGetComponent(out Monster monster))
         {
-            afterDelay = new Execution(attackType.AfterDelay);
-            attackChance = new Execution(attackType.Chance);
-            attack = new Execution(attackType.AttackLogic);
+            afterDelay = new Execution(monster.AfterDelay);
+            attackChance = new Execution(monster.Chance);
+            attack = new Execution(monster.AttackLogic);
         }
         
         BT.Add(damageSelector);

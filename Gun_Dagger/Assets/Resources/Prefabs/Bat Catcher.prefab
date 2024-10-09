@@ -12,11 +12,10 @@ GameObject:
   - component: {fileID: 6395177192233240816}
   - component: {fileID: 7070749942489810075}
   - component: {fileID: 8799547289487609500}
-  - component: {fileID: 8306327278843671438}
+  - component: {fileID: 7579029007793924407}
   - component: {fileID: 5252338915410618526}
   - component: {fileID: 2198548991519588789}
   - component: {fileID: 2607110414661606232}
-  - component: {fileID: 7579029007793924407}
   - component: {fileID: 9025287916149946297}
   - component: {fileID: -327274416650200995}
   m_Layer: 3
@@ -157,7 +156,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &8306327278843671438
+--- !u!114 &7579029007793924407
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -166,18 +165,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 742786365673370705}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ae6ff5740c88114fb36bf4c78cafa5b, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b6575a932f1ec84ca6e05e022819126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GetMonsterData: {fileID: 0}
   monsterHealth: {fileID: 5252338915410618526}
   monsterMovement: {fileID: 2198548991519588789}
   pathFinding: {fileID: 9025287916149946297}
   Rigidbody: {fileID: 8799547289487609500}
   Monster_bt: {fileID: 2607110414661606232}
-  type: 2
+  type: 0
   animator: {fileID: -327274416650200995}
   spriteRenderer: {fileID: 6395177192233240816}
+  weaponRange: {fileID: 2748694941218637823}
 --- !u!114 &5252338915410618526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,7 +189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d3bc7e389f99f74e9d62ec90c33684b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GetMonster: {fileID: 8306327278843671438}
+  GetMonster: {fileID: 7579029007793924407}
   idle: {fileID: 67086829, guid: 766684eacba4a9d4baa57a826ff5d80c, type: 3}
   attacked: {fileID: 21300000, guid: 52f3ac22e6984354d819ea2c636f358e, type: 3}
   HpBar: {fileID: 3308780818509311291}
@@ -207,7 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf0069ef784442140bd880a4b477b03d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monster: {fileID: 8306327278843671438}
+  monster: {fileID: 7579029007793924407}
   GetSprite: {fileID: -1077971983, guid: 02762e8cb38b05c449922470c02055aa, type: 3}
 --- !u!114 &2607110414661606232
 MonoBehaviour:
@@ -221,20 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56d6d9facd4f83f44bd8e186c69f3136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 2748694941218637823}
---- !u!114 &7579029007793924407
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 742786365673370705}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b6575a932f1ec84ca6e05e022819126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponRange: {fileID: 2748694941218637823}
+  GetMonster: {fileID: 7579029007793924407}
 --- !u!114 &9025287916149946297
 MonoBehaviour:
   m_ObjectHideFlags: 0

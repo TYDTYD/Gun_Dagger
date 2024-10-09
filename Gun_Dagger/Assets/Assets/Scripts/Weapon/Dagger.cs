@@ -6,7 +6,7 @@ using System;
 public class Dagger : MonoBehaviour
 {
     SpriteRenderer render;
-    Player GetPlayer;
+    [SerializeField] Player GetPlayer;
     public event Action AttckEvent;
     [SerializeField]
     protected Dagger GetDagger;
@@ -14,8 +14,8 @@ public class Dagger : MonoBehaviour
     Vector2 mouse_d;
     [SerializeField]
     Transform ani_Transform;
-    protected float damage = 35;
-    protected int pen = 2;
+    float damage = 35;
+    int pen = 2;
     protected bool isAttacked = false;
     float daggerCycleTime = 0.5f;
     public WeaponData meleeWeaponData;
@@ -27,6 +27,15 @@ public class Dagger : MonoBehaviour
     GameObject obj;
     bool OnNextAttack = false;
     int hash_value = Animator.StringToHash("AttackAnimation");
+
+    public float GetDamage
+    {
+        get { return damage; }
+    }
+    public int GetPen
+    {
+        get { return pen; }
+    }
 
     protected Transform GetTransform
     {
@@ -42,14 +51,13 @@ public class Dagger : MonoBehaviour
     }
     
     Transform playerTransform;
-    protected Player player;
     
     // 스타트 함수 제거 금지! Weapon의 스타트 함수를 상속받지 않기 위함
     private void Start()
     {
         render = GetComponent<SpriteRenderer>();
         ani = GetPlayer.GetAnimator;
-        playerTransform = player.GetTransform;
+        playerTransform = GetPlayer.GetTransform;
         dist = Vector3.Distance(playerTransform.position, transform.position);
         AttckEvent += DaggerAttck;
         // 삼각함수 인자는 라디안으로 받는다
@@ -74,7 +82,7 @@ public class Dagger : MonoBehaviour
 
     private void OnDisable()
     {
-        player.GetMovement.enabled = true;
+        GetPlayer.GetMovement.enabled = true;
         GetDagger.gameObject.SetActive(false);
     }
 
@@ -96,7 +104,7 @@ public class Dagger : MonoBehaviour
             bottom = dist * Mathf.Cos((angle + range * 0.5f) * Mathf.PI / 180f);
             mutableAngle = Mathf.Atan2(height, bottom) * Mathf.Rad2Deg;
             //transform.rotation = Quaternion.AngleAxis(mutableAngle, Vector3.forward);
-            player.setFlip(true);
+            GetPlayer.setFlip(true);
             //render.flipX = true;
         }
         else
@@ -105,7 +113,7 @@ public class Dagger : MonoBehaviour
             bottom = dist * Mathf.Cos((angle - range * 0.5f) * Mathf.PI / 180f);
             mutableAngle = Mathf.Atan2(height, bottom) * Mathf.Rad2Deg;
             //transform.rotation = Quaternion.AngleAxis(mutableAngle, Vector3.forward);
-            player.setFlip(false);
+            GetPlayer.setFlip(false);
             //render.flipX = true;
         }
         transform.position = new Vector2(ani_Transform.position.x+(GetPlayer.GetSpriteRenderer.flipX ? 1.5f:-1.5f),ani_Transform.position.y);
@@ -120,26 +128,26 @@ public class Dagger : MonoBehaviour
     public IEnumerator Attack(int? init = null)
     {
         
-        dist = Vector3.Distance(player.GetTransform.position, transform.position);
+        dist = Vector3.Distance(GetPlayer.GetTransform.position, transform.position);
         if (init != null)
         {
-            
-            player.GetMovement.enabled = false;
-            player.GetRigidBody.velocity = Vector2.zero;
+
+            GetPlayer.GetMovement.enabled = false;
+            GetPlayer.GetRigidBody.velocity = Vector2.zero;
             isAttacked = true;
             render.enabled = true;
             StartCoroutine(Swing(playerTransform.position.x, playerTransform.position.y));
             // 0.25초 쿨타임
             yield return new WaitForSeconds(daggerCycleTime);
             render.enabled = false;
-            player.GetMovement.enabled = true;
+            GetPlayer.GetMovement.enabled = true;
             isAttacked = false;
         }
         // 마우스 우클릭시 대검 사용
         else if (!isAttacked)
         {
-            player.GetMovement.enabled = false;
-            player.GetRigidBody.velocity = Vector2.zero;
+            GetPlayer.GetMovement.enabled = false;
+            GetPlayer.GetRigidBody.velocity = Vector2.zero;
             isAttacked = true;
             render.enabled = true;
             StartCoroutine(Swing(playerTransform.position.x, playerTransform.position.y));
@@ -158,7 +166,7 @@ public class Dagger : MonoBehaviour
             // 0.25초 쿨타임
             yield return new WaitForSeconds(daggerCycleTime);
             render.enabled = false;
-            player.GetMovement.enabled = true;
+            GetPlayer.GetMovement.enabled = true;
             isAttacked = false;
 
         }
