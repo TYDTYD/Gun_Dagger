@@ -66,7 +66,6 @@ public class Sequence : Node
     private List<Node> nodes = new List<Node>();
     public override NodeState operation()
     {
-        //Debug.Log("sequence");
         foreach (Node node in nodes)
         {
             switch (node.operation())

@@ -31,7 +31,7 @@ public class MonsterMovement : MonoBehaviour
     }
 
 #nullable enable
-    List<Vector3>? routes;
+    [SerializeField] List<Vector3>? routes;
     // Start is called before the first frame update
     void Start()
     {

@@ -92,7 +92,6 @@ public class Monster_BT : MonoBehaviour
         state = State.roaming;
         StartCoroutine(StartRandom());
         return Node.NodeState.SUCCESS;
-        
     }
 
     // Update is called once per frame

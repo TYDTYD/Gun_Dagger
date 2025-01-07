@@ -11,7 +11,7 @@ public class CloseAttack : Monster
     int damage = 50;
     float delayTime = 1f;
     int pen = 1;
-    float cognitionRange= 1.6f; 
+    float cognitionRange= 1.75f;
     float dist, x, y;
     // Start is called before the first frame update
     protected override void Start()
@@ -66,6 +66,7 @@ public class CloseAttack : Monster
 
     public override void SetAttack()
     {
+        boxCollider2D.enabled = true;
         weaponRange.GetComponent<SpriteRenderer>().enabled = false;
     }
 

@@ -55,9 +55,9 @@ public class PathFinding : MonoBehaviour
         return (a+100) + (b+100) *1000;
     }
 
-    int CalcH(int x1, int y1, int x2, int y2)
+    float CalcH(int x1, int y1, int x2, int y2)
     {
-        return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);        
+        return Mathf.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));        
     }
     // Start is called before the first frame update
     void Start()
@@ -81,14 +81,10 @@ public class PathFinding : MonoBehaviour
                     if (!wallPos.Contains(new Vector2((int)place.x+bx[i], (int)place.y+by[i])))
                         wallPos.Add(new Vector2((int)place.x + bx[i], (int)place.y + by[i]));
                 }
-                if (minX > place.x)
-                    minX = place.x;
-                if (minY > place.y)
-                    minY = place.y;
-                if (maxX < place.x)
-                    maxX = place.x;
-                if (maxY < place.y)
-                    maxY = place.y;
+                minX = Mathf.Min(minX, place.x);
+                minY = Mathf.Min(minY, place.y);
+                maxX = Mathf.Max(maxX, place.x);
+                maxY = Mathf.Max(maxY, place.y);
             }
         }
         maxX += 1;
@@ -131,9 +127,11 @@ public class PathFinding : MonoBehaviour
         while (q.Count != 0)
         {
             Node p = q.Dequeue();
+
             if (p.pos.x == destX && p.pos.y == destY)
             {
                 destIdx = p.id;
+
                 break;
             }
             for (int i = 0; i < 8; i++)
@@ -141,11 +139,24 @@ public class PathFinding : MonoBehaviour
                 int nx = dx[i] + p.pos.x;
                 int ny = dy[i] + p.pos.y;
                 if (nx < minX || nx > maxX || ny < minY || ny > maxY)
+                {
+                    Debug.Log(nx);
+                    Debug.Log(ny);
+                    Debug.Log(minX);
+                    Debug.Log(maxX);
+                    Debug.Log(minY);
+                    Debug.Log(maxY);
+                    Debug.Log("¹ß°ß");
+
                     continue;
+                }
                 int id = GetHashcode(nx, ny);
-                if (WallContacted(nx,ny) || closeList.ContainsKey(id))
+                if (WallContacted(nx, ny) || closeList.ContainsKey(id))
+                {
+
                     continue;
-                int h = CalcH(nx, ny, destX, destY);
+                }
+                float h = CalcH(nx, ny, destX, destY);
                 float dist = 1f;
                 if (i > 3)
                 {
@@ -157,7 +168,11 @@ public class PathFinding : MonoBehaviour
                 openList[next.id] = next;
             }
             if (openList.Count == 0)
+            {
+
+                
                 continue;
+            }
             float minValue = openList.Min(x => x.Value.f);
             int index = openList.First(y => y.Value.f == minValue).Value.id;
             q.Enqueue(openList[index]);
