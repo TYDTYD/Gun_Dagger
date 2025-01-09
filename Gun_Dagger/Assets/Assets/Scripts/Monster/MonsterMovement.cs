@@ -20,7 +20,7 @@ public class MonsterMovement : MonoBehaviour
     bool plag = false;
 
     WaitForSeconds cachedFollowRouteSeconds = new WaitForSeconds(0.1f);
-    WaitForSeconds cachedFindRouteSeconds = new WaitForSeconds(1f);
+    WaitForSeconds cachedFindRouteSeconds = new WaitForSeconds(1.5f);
 
     public float GetSpeed
     {

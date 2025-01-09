@@ -201,6 +201,7 @@ GameObject:
   m_Component:
   - component: {fileID: 584086803}
   - component: {fileID: 584086802}
+  - component: {fileID: 584086804}
   m_Layer: 0
   m_Name: UI_Manager
   m_TagString: Untagged
@@ -235,6 +236,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &584086804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584086801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 347462ed8d14c874f92f1af5a0c35e1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &785349282
 GameObject:
   m_ObjectHideFlags: 0
@@ -416,7 +429,7 @@ PrefabInstance:
     - target: {fileID: 11434868, guid: 751f7137cfffd4a16b1a4c191e687d64, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 584086802}
+      objectReference: {fileID: 584086804}
     - target: {fileID: 11434868, guid: 751f7137cfffd4a16b1a4c191e687d64, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -828,7 +841,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 584086802}
+      - m_Target: {fileID: 584086804}
         m_TargetAssemblyTypeName: Lobby, Assembly-CSharp
         m_MethodName: GameStartClick
         m_Mode: 1
