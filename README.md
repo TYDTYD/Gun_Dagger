@@ -1,7 +1,7 @@
 
 ## Gun & Dagger
 
-### [플레이 영상]()
+### [플레이 영상](https://youtu.be/Sm8UuIJbXFk)
 
 ### 프로젝트 소개
  - 게임 장르 : 2D 로그라이크 게임
