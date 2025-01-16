@@ -13,7 +13,51 @@
  - 나의 역할 : 클라이언트
 
 ### 기술 설명서
-- 적 AI 행동 트리 설계
-- 플레이어 추적 A Star 알고리즘 구현
-- Object Pooling을 통한 최적화
-- 플레이어 근접 공격 구현
+
+<details>
+  <summary>
+    적 AI 행동 트리 설계
+  </summary>
+ <pre>
+   <code>
+    private void start(){
+    }
+   </code>
+ </pre>
+</details>
+
+<details>
+  <summary>
+    플레이어 추적 A Star 알고리즘 구현
+  </summary>
+ <pre>
+   <code>
+    private void start(){
+    }
+   </code>
+ </pre>
+</details>
+
+<details>
+  <summary>
+    Object Pooling을 통한 최적화
+  </summary>
+ <pre>
+   <code>
+    private void start(){
+    }
+   </code>
+ </pre>
+</details>
+
+<details>
+  <summary>
+    플레이어 근접 공격 구현
+  </summary>
+ <pre>
+   <code>
+    private void start(){
+    }
+   </code>
+ </pre>
+</details>
