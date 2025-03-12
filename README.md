@@ -136,6 +136,98 @@ public class Execution : Node
 
 <details>
   <summary>
+    코루틴을 통해 A star 호출
+  </summary>
+ <pre>
+   
+```cs
+public class MonsterMovement : MonoBehaviour
+{
+    Vector3 dir;
+    Vector3 lastTarget;
+    [SerializeField] Monster monster;
+    Transform target;
+    float speed = 2f;
+    PathFinding PathFinding;
+    Monster_BT _BT;
+    Animator ani;
+    SpriteRenderer spriteRenderer;
+    Rigidbody2D rigid;
+    [SerializeField] Sprite GetSprite;
+    int index = 1;
+    bool plag = false;
+
+    WaitForSeconds cachedFollowRouteSeconds = new WaitForSeconds(0.1f);
+    WaitForSeconds cachedFindRouteSeconds = new WaitForSeconds(1.5f);
+
+    public float GetSpeed
+    {
+        get
+        {
+            return speed;
+        }
+    }
+
+#nullable enable
+    [SerializeField] List<Vector3>? routes;
+    // Start is called before the first frame update
+    void Start()
+    {
+        PathFinding = monster.GetPathFinding;
+        rigid = monster.GetRigidbody2D;
+        _BT = monster.GetMonster_BT;
+        ani = monster.GetAnimator;
+        spriteRenderer = monster.GetSpriteRenderer;
+        target = monster.GetPlayer.transform;
+    }
+
+    IEnumerator FollowRoute()
+    {
+        if (routes is null)
+            yield break;
+        while (routes!=null && index < routes.Count)
+        {
+            dir = (routes[index] - transform.position).normalized;
+            rigid.velocity = new Vector2(dir.x * speed, dir.y * speed);
+            spriteRenderer.flipX = (dir.x > 0);
+            if (Mathf.Abs(routes[index].x - transform.position.x) < 0.1f && Mathf.Abs(routes[index].y - transform.position.y) < 0.1f)
+                index++;
+            yield return cachedFollowRouteSeconds;
+        }
+        yield break;
+    }
+
+    IEnumerator FindRoute()
+    {
+        if (!plag)
+        {
+            plag = true;
+            if (routes != null && routes.Count != 0)
+            {
+                lastTarget = routes.Last();
+                if (Vector3.Distance(lastTarget, target.position) < 1f)
+                {
+                    plag = false;
+                    yield break;
+                }
+            }
+            routes = PathFinding.Astar();
+            index = 1;
+            StopCoroutine(FollowRoute());
+            StartCoroutine(FollowRoute());
+            yield return cachedFindRouteSeconds;
+            plag = false;
+        }
+        
+        yield return null;
+    }
+}
+```
+ </pre>
+</details>
+
+<details>
+  <summary>
     플레이어 추적 A Star 알고리즘 구현
   </summary>
  <pre>
