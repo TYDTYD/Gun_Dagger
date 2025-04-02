@@ -150,7 +150,17 @@ Execution : 실제 행동을 수행하는 노드
 
 행동 트리 설계에 따라 노드를 구현하고 List<Node>로 트리를 구성했습니다.
 
+## Scriptable Object를 통한 데이터 관리
+![image](https://github.com/user-attachments/assets/e8ce344c-2024-43d6-aff8-2603584b853d)
+![image](https://github.com/user-attachments/assets/569ceab7-ccb4-4256-b17a-5d47439960f4)
+Scriptable Object를 통해 무기 및 아이템과 관련된 데이터를 관리했으며 이를 바탕으로 기획자가 데이터를 쉽게 수정할 수 있었습니다.
 
+또한 Scriptable Object를 활용함으로써 데이터의 중앙 집중화, 메모리 최적화의 효과를 얻을 수 있었습니다.
+
+## 객체지향적 설계
+![image](https://github.com/user-attachments/assets/3e6533ab-af3e-459b-b085-7de8961a8790)
+
+## A star 구현
 <details>
   <summary>
     코루틴을 통해 A star 호출
@@ -456,11 +466,15 @@ public class PathFinding : MonoBehaviour
  </pre>
 </details>
 
+# 최적화
+## 오브젝트 풀링 구조 개선
+
 <details>
   <summary>
     Object Pooling을 통한 최적화
   </summary>
  <pre>
+![image](https://github.com/user-attachments/assets/7ce2e5f9-2907-476d-a40e-5998b8b80411)
 
 ```cs
 public enum ObjectType 
@@ -578,6 +592,14 @@ public class PoolingManager : Singleton<PoolingManager>
 ```
  </pre>
 </details>
+Dictionary <'ObjectType', Queue<'GameObject'>>
+오브젝트 풀링을 통해 자주 사용되는 게임 오브젝트들을 재사용했습니다.
+
+그러나 오브젝트의 종류가 많아지면서 Queue의 관리가 복잡해졌습니다.
+
+이를 개선하기 위해 각 오브젝트별로 Type을 정하고, Dictionary를 사용해 각 Type에 해당하는 Queue를 선언했습니다.
+
+이를 통해 오브젝트의 종류와 상관없이 오브젝트 풀링을 일관된 방식으로 수행할 수 있었습니다.
 
 <details>
   <summary>
