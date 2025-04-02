@@ -149,8 +149,7 @@ Execution : 실제 행동을 수행하는 노드
 행동 트리 설계에 따라 노드를 구현하고 List<Node>로 트리를 구성했습니다.
 
 ## Scriptable Object를 통한 데이터 관리
-![image](https://github.com/user-attachments/assets/e8ce344c-2024-43d6-aff8-2603584b853d)
-![image](https://github.com/user-attachments/assets/569ceab7-ccb4-4256-b17a-5d47439960f4)
+![image](https://github.com/user-attachments/assets/db164852-7c49-4b98-8a70-0bb29e516184)
 
 Scriptable Object를 통해 무기 및 아이템과 관련된 데이터를 관리했으며 이를 바탕으로 기획자가 데이터를 쉽게 수정할 수 있었습니다.
 
