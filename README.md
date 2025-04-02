@@ -258,18 +258,24 @@ public class MonsterMovement : MonoBehaviour
 ```cs
 public class PathFinding : MonoBehaviour
 {
-    int[] dx = { 1, 0, -1, 0, 1, -1, -1, 1 },
-        dy = { 0, 1, 0, -1, 1, 1, -1, -1 };
-    int destX, destY, destIdx = 0;
-    Queue<Node> q = new Queue<Node>();
     public GameObject target;
+
+    int[] dx = { 1, 0, -1, 0, 1, -1, -1, 1 }, dy = { 0, 1, 0, -1, 1, 1, -1, -1 };
+    int destX, destY, destIdx = 0;
+    float minX, minY, maxX, maxY;
+
+    Vector2 path = new Vector2();
+
+    Queue<Node> q = new Queue<Node>();
+
     List<Vector3> result = new List<Vector3>();
     List<Vector3> wallPos = new List<Vector3>();
+
     Dictionary<int, Node> openList = new Dictionary<int, Node>();
     Dictionary<int, Node> closeList = new Dictionary<int, Node>();
+
     Tilemap tilemap, walls;
-    float minX, minY, maxX, maxY;
-    Vector2 path = new Vector2();
+    
     public struct Node
     {
         public int id;
@@ -296,22 +302,9 @@ public class PathFinding : MonoBehaviour
             y = _y;
         }
     }
-
-    bool WallContacted(int x,int y)
-    {
-        return wallPos.Contains(new Vector2(x, y));
-    }
-
-    int GetHashcode(int a, int b)
-    {
-        return (a+100) + (b+100) *1000;
-    }
-
-    float CalcH(int x1, int y1, int x2, int y2)
-    {
-        return Mathf.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));        
-    }
-    // Start is called before the first frame update
+    bool WallContacted(int x, int y) => wallPos.Contains(new Vector2(x, y));
+    int GetHashcode(int a, int b) => (a + 100) + (b + 100) * 1000;
+    float CalcH(int x1, int y1, int x2, int y2) => Mathf.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     void Start()
     {
         if(tilemap==null)
@@ -383,31 +376,17 @@ public class PathFinding : MonoBehaviour
             if (p.pos.x == destX && p.pos.y == destY)
             {
                 destIdx = p.id;
-
                 break;
             }
             for (int i = 0; i < 8; i++)
             {
                 int nx = dx[i] + p.pos.x;
                 int ny = dy[i] + p.pos.y;
-                if (nx < minX || nx > maxX || ny < minY || ny > maxY)
-                {
-                    Debug.Log(nx);
-                    Debug.Log(ny);
-                    Debug.Log(minX);
-                    Debug.Log(maxX);
-                    Debug.Log(minY);
-                    Debug.Log(maxY);
-                    Debug.Log("발견");
-
-                    continue;
-                }
+                if (nx < minX || nx > maxX || ny < minY || ny > maxY)                
+                    continue;                
                 int id = GetHashcode(nx, ny);
-                if (WallContacted(nx, ny) || closeList.ContainsKey(id))
-                {
-
+                if (WallContacted(nx, ny) || closeList.ContainsKey(id))                
                     continue;
-                }
                 float h = CalcH(nx, ny, destX, destY);
                 float dist = 1f;
                 if (i > 3)
@@ -420,11 +399,7 @@ public class PathFinding : MonoBehaviour
                 openList[next.id] = next;
             }
             if (openList.Count == 0)
-            {
-
-                
                 continue;
-            }
             float minValue = openList.Min(x => x.Value.f);
             int index = openList.First(y => y.Value.f == minValue).Value.id;
             q.Enqueue(openList[index]);
