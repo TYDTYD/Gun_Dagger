@@ -163,8 +163,7 @@ Scriptable Object를 통해 무기 및 아이템과 관련된 데이터를 관�
   <summary>
     코루틴을 통해 A star 호출
   </summary>
- <pre>
-   
+ 
 ```cs
 public class MonsterMovement : MonoBehaviour
 {
@@ -248,15 +247,13 @@ public class MonsterMovement : MonoBehaviour
     }
 }
 ```
- </pre>
 </details>
 
 <details>
   <summary>
     플레이어 추적 A Star 알고리즘 구현
   </summary>
- <pre>
-
+ 
 ```cs
 public class PathFinding : MonoBehaviour
 {
@@ -460,8 +457,6 @@ public class PathFinding : MonoBehaviour
     }
 }
 ```
-   </code>
- </pre>
 </details>
 
 # 최적화
@@ -471,8 +466,6 @@ public class PathFinding : MonoBehaviour
   <summary>
     Object Pooling을 통한 최적화
   </summary>
- <pre>
-![image](https://github.com/user-attachments/assets/7ce2e5f9-2907-476d-a40e-5998b8b80411)
 
 ```cs
 public enum ObjectType 
@@ -588,7 +581,6 @@ public class PoolingManager : Singleton<PoolingManager>
     }
 }
 ```
- </pre>
 </details>
 Dictionary <'ObjectType', Queue<'GameObject'>>
 오브젝트 풀링을 통해 자주 사용되는 게임 오브젝트들을 재사용했습니다.
@@ -612,8 +604,7 @@ Dictionary <'ObjectType', Queue<'GameObject'>>
   <summary>
     플레이어 근접 공격 구현
   </summary>
- <pre>
-
+ 
 ```cs
 public class Dagger_HitBox : MonoBehaviour
 {
@@ -723,5 +714,4 @@ public class Dagger_HitBox : MonoBehaviour
     }
 }
 ```
- </pre>
 </details>
