@@ -1,18 +1,19 @@
 
-## Gun & Dagger
+# Gun & Dagger
 
 ### [플레이 영상](https://youtu.be/Sm8UuIJbXFk)
 
-### 프로젝트 소개
+## 프로젝트 소개
  - 게임 장르 : 2D 로그라이크 게임
  - 제작 기간 : 2024.07 ~ 2024.09
  - 프로젝트 목표 : 게임 공모전 출시
    
-### 개발 규모
+## 개발 규모
  - 개인 프로젝트
 
-### 기술 설명서
+# 기술 경험
 
+## AI 행동 트리 설계
 <details>
   <summary>
     적 AI 행동 트리 설계
@@ -132,6 +133,23 @@ public class Execution : Node
 ```
  </pre>
 </details>
+
+![image](https://github.com/user-attachments/assets/03ffa0b7-20b1-4403-a08c-e3870d701f1c)
+
+작성한 다이어그램을 토대로 FSM을 설계하려 했으나, 상태가 많아질수록 코드가 복잡해지는 문제가 생겼습니다.
+
+![image](https://github.com/user-attachments/assets/36df82d0-f384-46ea-af21-5a741e6c1e61)
+FSM은 상태 전이가 많아질수록 유지보수가 어려워지므로, 더 효율적인 방식인 행동 트리를 설계하였습니다.
+
+![image](https://github.com/user-attachments/assets/6451a977-78a6-4ce7-8109-1c78d08cb4a2)
+Selector : 여러 행동 중 하나라도 성공하면 즉시 종료하고 성공을 반환하는 노드
+
+Sequence : 모든 자식 노드를 순서대로 실행해야 성공하는 노드
+
+Execution : 실제 행동을 수행하는 노드
+
+행동 트리 설계에 따라 노드를 구현하고 List<Node>로 트리를 구성했습니다.
+
 
 <details>
   <summary>
