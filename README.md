@@ -18,9 +18,8 @@
   <summary>
     적 AI 행동 트리 설계
   </summary>
- <pre>
-  
- ```cs
+ 
+```cs
 public class Node
 {
     public Action perform;
@@ -131,7 +130,6 @@ public class Execution : Node
     }
 }
 ```
- </pre>
 </details>
 
 ![image](https://github.com/user-attachments/assets/03ffa0b7-20b1-4403-a08c-e3870d701f1c)
