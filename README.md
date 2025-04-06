@@ -169,20 +169,25 @@ public class MonsterMovement : MonoBehaviour
 {
     Vector3 dir;
     Vector3 lastTarget;
+
     [SerializeField] Monster monster;
+    [SerializeField] Sprite GetSprite;
+
     Transform target;
     float speed = 2f;
+    
     PathFinding PathFinding;
     Monster_BT _BT;
     Animator ani;
     SpriteRenderer spriteRenderer;
+    Coroutine followRouteCoroutine;
     Rigidbody2D rigid;
-    [SerializeField] Sprite GetSprite;
+    
     int index = 1;
     bool plag = false;
 
     WaitForSeconds cachedFollowRouteSeconds = new WaitForSeconds(0.1f);
-    WaitForSeconds cachedFindRouteSeconds = new WaitForSeconds(1.5f);
+    WaitForSeconds cachedFindRouteSeconds = new WaitForSeconds(1f);
 
     public float GetSpeed
     {
@@ -207,45 +212,106 @@ public class MonsterMovement : MonoBehaviour
 
     IEnumerator FollowRoute()
     {
-        if (routes is null)
+        if (routes == null || routes.Count == 0)
             yield break;
-        while (routes!=null && index < routes.Count)
+
+        while (index < routes.Count)
         {
             dir = (routes[index] - transform.position).normalized;
             rigid.velocity = new Vector2(dir.x * speed, dir.y * speed);
             spriteRenderer.flipX = (dir.x > 0);
-            if (Mathf.Abs(routes[index].x - transform.position.x) < 0.1f && Mathf.Abs(routes[index].y - transform.position.y) < 0.1f)
+
+            if (Vector2.Distance(routes[index], transform.position) < 0.2f)
                 index++;
+
             yield return cachedFollowRouteSeconds;
         }
-        yield break;
     }
 
     IEnumerator FindRoute()
     {
-        if (!plag)
+        if (plag)
+            yield break;
+
+        plag = true;
+
+        routes = PathFinding.Astar();
+        index = 1;
+
+        if(routes!=null && routes.Count > 0)
         {
-            plag = true;
-            if (routes != null && routes.Count != 0)
-            {
-                lastTarget = routes.Last();
-                if (Vector3.Distance(lastTarget, target.position) < 1f)
-                {
-                    plag = false;
-                    yield break;
-                }
-            }
-            routes = PathFinding.Astar();
-            index = 1;
-            StopCoroutine(FollowRoute());
-            StartCoroutine(FollowRoute());
-            yield return cachedFindRouteSeconds;
-            plag = false;
+            if (followRouteCoroutine != null)
+                StopCoroutine(followRouteCoroutine);
+            followRouteCoroutine = StartCoroutine(FollowRoute());
         }
-        
-        yield return null;
+
+        yield return cachedFindRouteSeconds;
+
+        plag = false;
+    }
+
+    public Node.NodeState SetChase()
+    {
+        if (_BT.GetState == Monster_BT.State.attack || _BT.GetState == Monster_BT.State.ready || _BT.GetState == Monster_BT.State.delay || _BT.GetState == Monster_BT.State.afterdelay)
+            return Node.NodeState.FAILURE;
+        _BT.GetState = Monster_BT.State.chase;
+        StartCoroutine(FindRoute());
+        if (routes == null)
+        {
+            _BT.GetState = Monster_BT.State.roaming;
+            return Node.NodeState.FAILURE;
+        }
+        _BT.GetState = Monster_BT.State.chase;
+        return Node.NodeState.SUCCESS;
+    }
+
+
+
+    private void FixedUpdate()
+    {
+        switch (_BT.GetState)
+        {
+            case Monster_BT.State.groggi:
+                {
+                    rigid.velocity = Vector2.zero;
+                    
+                    Debug.Log("그로기");
+                    break;
+                }
+            case Monster_BT.State.chase: // chase 상태
+                {
+                    ani.Play("walk");
+                    break;
+                }
+            case Monster_BT.State.attack:
+                {
+                    rigid.velocity = Vector2.zero;
+                    ani.Play("atk");
+                    break;
+                }
+            case Monster_BT.State.delay:
+                {
+                    rigid.velocity = Vector2.zero;
+                    break;
+                }
+            case Monster_BT.State.roaming:
+                {
+                    ani.Play("walk");
+                    break;
+                }
+            case Monster_BT.State.afterdelay:
+                {
+                    rigid.velocity = Vector2.zero;
+                    break;
+                }
+            case Monster_BT.State.Idle:
+                {
+                    break;
+                }
+        }
     }
 }
+
 ```
 </details>
 
