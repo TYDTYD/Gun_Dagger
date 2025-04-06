@@ -73,18 +73,6 @@ public class MonsterMovement : MonoBehaviour
 
         plag = true;
 
-        if (routes != null && routes.Count > 0)
-        {
-            lastTarget = routes.Last();
-
-            // 목표가 크게 변하지 않으면 경로 갱신하지 않음
-            if (Vector3.Distance(lastTarget, target.position) < 1f)
-            {
-                plag = false;
-                yield break;
-            }
-        }
-
         routes = PathFinding.Astar();
         index = 1;
 

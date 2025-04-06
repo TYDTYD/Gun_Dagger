@@ -12,15 +12,17 @@ public struct Vertex
     public int parentId;
     public int2 pos;
     public float f, g, h;
-    public Vertex(int _id, int _parentId, int2 _pos, float _f, float _g, float _h)
+    public Vertex(int x, int y, int _parentId, int2 _pos, float _f, float _g, float _h)
     {
-        id = _id;
+        id = GetHash(x,y);
         parentId = _parentId;
         pos = _pos;
         f = _f;
         g = _g;
         h = _h;
     }
+    // 좌표 (a, b)를 고유한 해시 값으로 변환
+    static int GetHash(int a, int b) => (a + 100) + (b + 100) * 1000;
 }
 
 [BurstCompile]
@@ -52,11 +54,8 @@ public struct AStarExpandJob : IJobParallelFor
         float g = current.g + (i > 3 ? diagonalCost : 1f);
         float f = g + h;
 
-        int id = GetHash(nextPos.x, nextPos.y);
-        openList.AddNoResize(new Vertex(id, current.id, nextPos, f, g, h));
+        openList.AddNoResize(new Vertex(nextPos.x, nextPos.y, current.id, nextPos, f, g, h));
     }
-
-    int GetHash(int x, int y) => (x + 100) + (y + 100) * 1000;
     bool IsOutsideMap(int2 pos) => pos.x < minBounds.x || pos.x > maxBounds.x || pos.y < minBounds.y || pos.y > maxBounds.y;
     bool IsTouchingWall(int2 pos) => wallHash.Contains(pos + new int2(1, 0)) || wallHash.Contains(pos + new int2(-1, 0)) || wallHash.Contains(pos + new int2(0, 1)) || wallHash.Contains(pos + new int2(0, -1));
 }
@@ -68,6 +67,7 @@ public class PathFinding : MonoBehaviour
     int[] dx = { 1, 0, -1, 0, 1, -1, -1, 1 }, dy = { 0, 1, 0, -1, 1, 1, -1, -1 };
     int destX, destY, destIdx = 0;
     float minX, minY, maxX, maxY;
+
     Queue<Vertex> q = new Queue<Vertex>();
 
     List<Vector3> result = new List<Vector3>();
@@ -84,8 +84,6 @@ public class PathFinding : MonoBehaviour
 
     Tilemap tilemap, walls;
 
-    // 좌표 (a, b)를 고유한 해시 값으로 변환
-    int GetHashcode(int a, int b) => (a + 100) + (b + 100) * 1000;
     void Start()
     {
         if(tilemap==null)
@@ -169,7 +167,7 @@ public class PathFinding : MonoBehaviour
         int posX = (int)transform.position.x;
         int posY = (int)transform.position.y;
 
-        Vertex start = new Vertex(GetHashcode(posX, posY), -1, new int2(posX, posY), 0, 0, 0);
+        Vertex start = new Vertex(posX, posY, -1, new int2(posX, posY), 0, 0, 0);
         nodeList.AddNoResize(start);
         closeList[start.id] = start;
         q.Enqueue(start);
@@ -246,6 +244,8 @@ public class PathFinding : MonoBehaviour
         {
             result.Add(new Vector2(r.pos.x, r.pos.y));
             r = closeList[r.parentId];
+            if (r.parentId == -1)
+                break;
         }
         
         // 역경로의 순서를 거꾸로 뒤집기
