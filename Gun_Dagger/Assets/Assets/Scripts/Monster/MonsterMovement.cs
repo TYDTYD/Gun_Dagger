@@ -7,20 +7,25 @@ public class MonsterMovement : MonoBehaviour
 {
     Vector3 dir;
     Vector3 lastTarget;
+
     [SerializeField] Monster monster;
+    [SerializeField] Sprite GetSprite;
+
     Transform target;
     float speed = 2f;
+    
     PathFinding PathFinding;
     Monster_BT _BT;
     Animator ani;
     SpriteRenderer spriteRenderer;
+    Coroutine followRouteCoroutine;
     Rigidbody2D rigid;
-    [SerializeField] Sprite GetSprite;
+    
     int index = 1;
     bool plag = false;
 
     WaitForSeconds cachedFollowRouteSeconds = new WaitForSeconds(0.1f);
-    WaitForSeconds cachedFindRouteSeconds = new WaitForSeconds(1.5f);
+    WaitForSeconds cachedFindRouteSeconds = new WaitForSeconds(1f);
 
     public float GetSpeed
     {
@@ -45,43 +50,54 @@ public class MonsterMovement : MonoBehaviour
 
     IEnumerator FollowRoute()
     {
-        if (routes is null)
+        if (routes == null || routes.Count == 0)
             yield break;
-        while (routes!=null && index < routes.Count)
+
+        while (index < routes.Count)
         {
             dir = (routes[index] - transform.position).normalized;
             rigid.velocity = new Vector2(dir.x * speed, dir.y * speed);
             spriteRenderer.flipX = (dir.x > 0);
-            if (Mathf.Abs(routes[index].x - transform.position.x) < 0.1f && Mathf.Abs(routes[index].y - transform.position.y) < 0.1f)
+
+            if (Vector2.Distance(routes[index], transform.position) < 0.2f)
                 index++;
+
             yield return cachedFollowRouteSeconds;
         }
-        yield break;
     }
 
     IEnumerator FindRoute()
     {
-        if (!plag)
+        if (plag)
+            yield break;
+
+        plag = true;
+
+        if (routes != null && routes.Count > 0)
         {
-            plag = true;
-            if (routes != null && routes.Count != 0)
+            lastTarget = routes.Last();
+
+            // 목표가 크게 변하지 않으면 경로 갱신하지 않음
+            if (Vector3.Distance(lastTarget, target.position) < 1f)
             {
-                lastTarget = routes.Last();
-                if (Vector3.Distance(lastTarget, target.position) < 1f)
-                {
-                    plag = false;
-                    yield break;
-                }
+                plag = false;
+                yield break;
             }
-            routes = PathFinding.Astar();
-            index = 1;
-            StopCoroutine(FollowRoute());
-            StartCoroutine(FollowRoute());
-            yield return cachedFindRouteSeconds;
-            plag = false;
         }
-        
-        yield return null;
+
+        routes = PathFinding.Astar();
+        index = 1;
+
+        if(routes!=null && routes.Count > 0)
+        {
+            if (followRouteCoroutine != null)
+                StopCoroutine(followRouteCoroutine);
+            followRouteCoroutine = StartCoroutine(FollowRoute());
+        }
+
+        yield return cachedFindRouteSeconds;
+
+        plag = false;
     }
 
     public Node.NodeState SetChase()
