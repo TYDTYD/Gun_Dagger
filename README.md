@@ -158,7 +158,7 @@ Scriptable Object를 통해 무기 및 아이템과 관련된 데이터를 관�
 ## 객체지향적 설계
 ![image](https://github.com/user-attachments/assets/3e6533ab-af3e-459b-b085-7de8961a8790)
 
-## A star 구현
+## Job System을 활용한 A star 구현
 <details>
   <summary>
     코루틴을 통해 A star 호출
@@ -251,10 +251,64 @@ public class MonsterMovement : MonoBehaviour
 
 <details>
   <summary>
-    플레이어 추적 A Star 알고리즘 구현
+    Job System을 활용한 플레이어 추적 A Star 알고리즘 구현
   </summary>
  
 ```cs
+public struct Vertex
+{
+    public int id;
+    public int parentId;
+    public int2 pos;
+    public float f, g, h;
+    public Vertex(int x, int y, int _parentId, int2 _pos, float _f, float _g, float _h)
+    {
+        id = GetHash(x,y);
+        parentId = _parentId;
+        pos = _pos;
+        f = _f;
+        g = _g;
+        h = _h;
+    }
+    // 좌표 (a, b)를 고유한 해시 값으로 변환
+    static int GetHash(int a, int b) => (a + 100) + (b + 100) * 1000;
+}
+
+[BurstCompile]
+public struct AStarExpandJob : IJobParallelFor
+{   
+    [ReadOnly] public NativeArray<int2> directions;
+    [ReadOnly] public NativeHashSet<int2> wallHash;
+    [ReadOnly] public int2 dest;
+    [ReadOnly] public float2 minBounds;
+    [ReadOnly] public float2 maxBounds;
+
+    [NativeDisableParallelForRestriction] public NativeList<Vertex>.ParallelWriter openList;
+
+    public Vertex current;
+    const float diagonalCost = 1.4142135f;
+
+    public void Execute(int i)
+    {
+        int2 dir = directions[i];
+        int2 nextPos = current.pos + dir;
+
+        if (IsOutsideMap(nextPos) || wallHash.Contains(nextPos))
+            return;
+
+        if (i > 3 && IsTouchingWall(nextPos))
+            return;
+
+        float h = math.distance(nextPos, dest);
+        float g = current.g + (i > 3 ? diagonalCost : 1f);
+        float f = g + h;
+
+        openList.AddNoResize(new Vertex(nextPos.x, nextPos.y, current.id, nextPos, f, g, h));
+    }
+    bool IsOutsideMap(int2 pos) => pos.x < minBounds.x || pos.x > maxBounds.x || pos.y < minBounds.y || pos.y > maxBounds.y;
+    bool IsTouchingWall(int2 pos) => wallHash.Contains(pos + new int2(1, 0)) || wallHash.Contains(pos + new int2(-1, 0)) || wallHash.Contains(pos + new int2(0, 1)) || wallHash.Contains(pos + new int2(0, -1));
+}
+
 public class PathFinding : MonoBehaviour
 {
     public GameObject target;
@@ -263,58 +317,35 @@ public class PathFinding : MonoBehaviour
     int destX, destY, destIdx = 0;
     float minX, minY, maxX, maxY;
 
-    Vector2 path = new Vector2();
-
-    Queue<Node> q = new Queue<Node>();
+    Queue<Vertex> q = new Queue<Vertex>();
 
     List<Vector3> result = new List<Vector3>();
-    List<Vector3> wallPos = new List<Vector3>();
 
-    Dictionary<int, Node> openList = new Dictionary<int, Node>();
-    Dictionary<int, Node> closeList = new Dictionary<int, Node>();
+    Dictionary<int, Vertex> openList = new Dictionary<int, Vertex>();
+    Dictionary<int, Vertex> closeList = new Dictionary<int, Vertex>();
+    HashSet<int> visited = new HashSet<int>();
+    HashSet<Vector2> wallPos = new HashSet<Vector2>();
+    SortedSet<(float, int)> pq = new SortedSet<(float, int)>();
+
+    NativeList<Vertex> nodeList;
+    NativeHashSet<int2> wallHash;
+    NativeArray<int2> directions;
 
     Tilemap tilemap, walls;
-    
-    public struct Node
-    {
-        public int id;
-        public int parentId;
-        public pair pos;
-        public float f, g, h;
-        public Node(int _id,int _parentId, pair _pos,float _f,float _g, float _h)
-        {
-            id = _id;
-            parentId = _parentId;
-            pos = _pos;
-            f = _f;
-            g = _g;
-            h = _h;
-        }
-    }
-    public struct pair
-    {
-        public int x;
-        public int y;
-        public pair(int _x, int _y)
-        {
-            x = _x;
-            y = _y;
-        }
-    }
-    bool WallContacted(int x, int y) => wallPos.Contains(new Vector2(x, y));
-    int GetHashcode(int a, int b) => (a + 100) + (b + 100) * 1000;
-    float CalcH(int x1, int y1, int x2, int y2) => Mathf.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+
     void Start()
     {
         if(tilemap==null)
-        {
             tilemap = MapManager.Instance.maps[MapManager.Instance.seed].GetComponent<Tilemap>();
-        }
+
         walls = GameObject.FindWithTag("Wall").GetComponent<Tilemap>();
+        // 경로 탐색의 목표 지점이 되는 게임 오브젝트
         target = GameObject.FindGameObjectWithTag("Player");
 
         int[] bx = { 0, 1, 0, 1 };
         int[] by = { 0, 0, 1, 1 };
+        
+        // 장애물 위치 리스트에 추가 및 맵의 경계값 할당
         foreach (var pos in walls.cellBounds.allPositionsWithin)
         {
             Vector3 place = walls.CellToWorld(pos);
@@ -331,13 +362,33 @@ public class PathFinding : MonoBehaviour
                 maxY = Mathf.Max(maxY, place.y);
             }
         }
+
         maxX += 1;
         maxY += 1;
+
+        nodeList = new NativeList<Vertex>(16, Allocator.Persistent);
+        wallHash = new NativeHashSet<int2>(wallPos.Count, Allocator.Persistent);
+        directions = new NativeArray<int2>(8, Allocator.Persistent);
+
+        foreach (var wall in wallPos)
+            wallHash.Add(new int2((int)wall.x, (int)wall.y));
+
+        for (int i = 0; i < 8; i++)
+            directions[i] = new int2(dx[i], dy[i]);
+    }
+
+    private void OnDestroy()
+    {
+        if (nodeList.IsCreated) nodeList.Dispose();
+        if (wallHash.IsCreated) wallHash.Dispose();
+        if (directions.IsCreated) directions.Dispose();
     }
 
     void Init()
     {
         q.Clear();
+        visited.Clear();
+        pq.Clear();
         openList.Clear();
         closeList.Clear();
     }
@@ -353,7 +404,7 @@ public class PathFinding : MonoBehaviour
         {
             for (int i = 0; i < 8; i++)
             {
-                if (!wallPos.Contains(new Vector2(destX+dx[i], destY+dy[i])))
+                if (!wallPos.Contains(new Vector2(destX + dx[i], destY + dy[i])))
                 {
                     destX += dx[i];
                     destY += dy[i];
@@ -361,73 +412,94 @@ public class PathFinding : MonoBehaviour
                 }
             }
         }
-        
+
         int posX = (int)transform.position.x;
         int posY = (int)transform.position.y;
-        Node start = new Node(GetHashcode(posX, posY), -1, new pair(posX, posY), 0, 0, 0);
-        q.Enqueue(start);
-        closeList[start.id] = start;
-        
-        while (q.Count != 0)
-        {
-            Node p = q.Dequeue();
 
+        Vertex start = new Vertex(posX, posY, -1, new int2(posX, posY), 0, 0, 0);
+        nodeList.AddNoResize(start);
+        closeList[start.id] = start;
+        q.Enqueue(start);
+        visited.Add(start.id);
+
+        while (q.Count > 0)
+        {
+            Vertex p = q.Dequeue();
             if (p.pos.x == destX && p.pos.y == destY)
             {
                 destIdx = p.id;
                 break;
             }
-            for (int i = 0; i < 8; i++)
-            {
-                int nx = dx[i] + p.pos.x;
-                int ny = dy[i] + p.pos.y;
-                if (nx < minX || nx > maxX || ny < minY || ny > maxY)                
-                    continue;                
-                int id = GetHashcode(nx, ny);
-                if (WallContacted(nx, ny) || closeList.ContainsKey(id))                
-                    continue;
-                float h = CalcH(nx, ny, destX, destY);
-                float dist = 1f;
-                if (i > 3)
-                {
-                    dist = 2f;
-                    if (WallContacted(nx + 1, ny) || WallContacted(nx - 1, ny) || WallContacted(nx, ny + 1) || WallContacted(nx, ny - 1))
-                        continue;
-                }
-                Node next = new Node(id, p.id, new pair(nx, ny), p.g + dist + h, p.g + dist, h);
-                openList[next.id] = next;
-            }
-            if (openList.Count == 0)
-                continue;
-            float minValue = openList.Min(x => x.Value.f);
-            int index = openList.First(y => y.Value.f == minValue).Value.id;
-            q.Enqueue(openList[index]);
-            closeList[openList[index].id] = openList[index];
-            openList.Remove(index);
-        }
 
-        // 목적지 좌표의 노드 반환
+            var job = new AStarExpandJob
+            {
+                current = p,
+                openList = nodeList.AsParallelWriter(),
+                directions = directions,
+                wallHash = wallHash,
+                dest = new int2(destX, destY),
+                minBounds = new float2(minX, minY),
+                maxBounds = new float2(maxX, maxY)
+            };
+
+            JobHandle handle = job.Schedule(directions.Length, 1);
+            handle.Complete();
+
+            foreach (var node in nodeList)
+            {
+                if (visited.Contains(node.id))
+                    continue;
+                if (!openList.ContainsKey(node.id) || node.f < openList[node.id].f)
+                {
+                    openList[node.id] = node;
+                    pq.Add((node.f, node.id));
+                }
+            }
+
+            nodeList.Clear();
+
+            // openList에 존재하는 노드를 찾을 때까지 반복
+            while (pq.Count > 0)
+            {
+                var minNode = pq.Min;
+                int index = minNode.Item2;
+
+                if (!openList.ContainsKey(index))
+                {
+                    pq.Remove(pq.Min);  // openList에 없는 경우 제거 후 다시 찾기
+                    continue;
+                }
+
+                q.Enqueue(openList[index]);
+                closeList[openList[index].id] = openList[index];
+                visited.Add(index);
+                openList.Remove(index);
+                pq.Remove(minNode);
+                break;  // 성공적으로 찾으면 루프 종료
+            }
+        }
+        
         if (destIdx == 0)
         {
             Init();
             return null;
         }
-        Node r = closeList[destIdx];
+
+        // 목적지 좌표의 노드 반환
+        Vertex r = closeList[destIdx];
         result.Clear();
-        while (true)
+
+        while(r.pos.x != posX || r.pos.y != posY)
         {
-            path.Set(r.pos.x, r.pos.y);
-            result.Add(path);
-            // 역경로 추적
-            if (r.pos.x == posX && r.pos.y == posY)
-                break;
+            result.Add(new Vector2(r.pos.x, r.pos.y));
+            r = closeList[r.parentId];
             if (r.parentId == -1)
                 break;
-            r = closeList[r.parentId];
         }
-        Init();
+        
         // 역경로의 순서를 거꾸로 뒤집기
         result.Reverse();
+        Init();
         return result; 
     }
 }
